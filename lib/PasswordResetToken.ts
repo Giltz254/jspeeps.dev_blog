@@ -54,7 +54,7 @@ export const sendPasswordResetToken = async (
   name: string,
 ) => {
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const passwordResetLink = `${process.env.BASE_URL}/new-password?token=${token}`;
+  const passwordResetLink = `${process.env.NEXT_PUBLIC_BASE_URL}/new-password?token=${token}`;
   const res = await resend.emails.send({
     from: "Acme <onboarding@resend.dev>",
     to: email,

@@ -36,7 +36,7 @@ export async function generateMetadata({
     openGraph: {
       images: [
         {
-          url: blog.coverImage ?? `${process.env.BASE_URL}/opengraph-image.png`,
+          url: blog.coverImage ?? `${process.env.NEXT_PUBLIC_BASE_URL}/opengraph-image.png`,
         },
       ],
     },

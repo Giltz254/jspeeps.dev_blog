@@ -6,7 +6,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let dynamicRoutes: MetadataRoute.Sitemap = [];
   if (slugs && slugs.length > 0) {
     dynamicRoutes = slugs.map(({ slug, updatedAt }) => ({
-      url: `${process.env.BASE_URL}/blog/${slug}`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/blog/${slug}`,
       lastModified: new Date(updatedAt),
       changeFrequency: "monthly",
     }));
@@ -14,17 +14,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     {
-      url: `${process.env.BASE_URL}/blog/feed/1`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/blog/feed/1`,
       lastModified: new Date(),
       changeFrequency: "weekly",
     },
     {
-      url: `${process.env.BASE_URL}/about`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/about`,
       lastModified: new Date(),
       changeFrequency: "monthly",
     },
     {
-      url: `${process.env.BASE_URL}/privacy`,
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/privacy`,
       lastModified: new Date(),
       changeFrequency: "weekly",
     },
