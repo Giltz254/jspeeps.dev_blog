@@ -73,10 +73,10 @@ const page = async ({ params }: BlogContentProps) => {
   }
   return (
     <main className="max-w-5xl mx-auto px-4 pt-10">
-      <h1 className="text-3xl md:text-4xl font-bold mb-2 leading-snug">
+      <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl text-black">
         {blog.title}
       </h1>
-      <p className="text-lg text-gray-700 mb-6">{blog.description}</p>
+      <p className="text-lg text-gray-700 mb-6 pt-4">{blog.description}</p>
       {blog.user && blog.user.name && blog.user.image && blog.createdAt && (
         <PostMeta
           author={blog.user.name}
@@ -102,24 +102,21 @@ const page = async ({ params }: BlogContentProps) => {
             priority
           />
           <div className="absolute inset-0 bg-black/30 flex flex-col justify-end p-4">
-            <h1 className="text-white text-xl lg:text-3xl font-bold mb-2">
+            <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl text-white">
               {blog.title}
             </h1>
-            <div className="flex flex-wrap gap-2">
-              {blog.tags && blog.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="bg-white text-black text-sm px-2 py-1 rounded-full"
-                >
-                  {tag}
+            <div className="flex flex-wrap gap-2 pt-4">
+              {blog.tags && blog.tags[0] && (
+                <span className="bg-white text-black text-sm px-2 py-1 rounded-full">
+                  {blog.tags[0]}
                 </span>
-              ))}
+              )}
             </div>
           </div>
         </div>
       )}
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-64px)]">
-        <div className="flex-1 lg:border-r lg:border-t border-border py-6">
+        <div className="flex-1 lg:border-r lg:border-t border-border">
           <article className="lg:pr-4 content">
             {Array.isArray(blog.content) &&
               blog.content.map((blogItem, i) => (

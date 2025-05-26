@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EB_Garamond } from "next/font/google";
+import { EB_Garamond, Gelasio } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/custom/layout/Footer";
 

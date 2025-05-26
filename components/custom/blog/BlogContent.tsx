@@ -127,12 +127,12 @@ const BlogContent = ({ blog }: { blog: any }) => {
   }
   if (type === "header") {
     const headers = [
-      "text-2xl first-letter:capitalize font-bold",
-      "text-xl first-letter:capitalize font-bold",
-      "text-lg first-letter:capitalize font-bold",
-      "text-base first-letter:capitalize font-bold",
-      "text-base first-letter:capitalize font-bold",
-      "text-sm first-letter:capitalize font-bold",
+      "font-bold text-4xl md:text-5xl lg:text-6xl text-black",
+      "font-bold text-3xl md:text-4xl lg:text-5xl text-black",
+      "text-2xl md:text-3xl lg:text-4xl text-black",
+      "text-xl md:text-2xl lg:text-3xl text-black",
+      "font-bold text-lg md:text-xl lg:text-2xl text-black",
+      "font-bold text-base md:text-lg lg:text-xl text-black",
     ];
 
     const level = Math.max(1, Math.min(data.level, 6));
