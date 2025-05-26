@@ -10,7 +10,7 @@ import { LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema, LoginSchemaType } from "@/schemas/LoginSchema";
 import { AuthError } from "next-auth";
 
-export const Login = async (values: LoginSchemaType) => {
+export const Login = async (values: LoginSchemaType, callbackUrl?: string | null) => {
   const validatedFields = LoginSchema.safeParse(values);
   if (!validatedFields.success) {
     return { error: "Invalid fields!" };
@@ -44,7 +44,7 @@ export const Login = async (values: LoginSchemaType) => {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: LOGIN_REDIRECT,
+      redirectTo: callbackUrl || LOGIN_REDIRECT,
     });
   } catch (error) {
     if (error instanceof AuthError) {

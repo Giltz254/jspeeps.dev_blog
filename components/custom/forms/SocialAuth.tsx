@@ -4,11 +4,14 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
 import { LOGIN_REDIRECT } from "@/routes";
+import { useSearchParams } from "next/navigation";
 
 const SocialAuth = () => {
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl");
   const handleClick = (provider: "google" | "github") => {
     signIn(provider, {
-      redirectTo: LOGIN_REDIRECT,
+      redirectTo: callbackUrl || LOGIN_REDIRECT,
     });
   };
   return (

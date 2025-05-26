@@ -27,6 +27,7 @@ const LoginForm = () => {
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider"
       : "";
+  const callbackUrl = searchParams.get("callbackUrl");
   const token = searchParams.get("token") ?? undefined;
   useEffect(() => {
     if (token) {
@@ -52,13 +53,13 @@ const LoginForm = () => {
 
     startTransition(() => {
       (async () => {
-        const res = await Login(data);
+        const res = await Login(data, callbackUrl);
         if (res?.error) {
           setError(res.error);
         } else if (res?.requiresVerification) {
           setSuccess(res.success);
         } else {
-          router.push(LOGIN_REDIRECT);
+          router.push(callbackUrl || LOGIN_REDIRECT);
         }
       })();
     });
@@ -88,9 +89,7 @@ const LoginForm = () => {
                 errors={errors}
                 placeholder="Fill in your email"
                 disabled={isPending}
-                leftIcon={
-                  <MdMailOutline size={24} className="text-black" />
-                }
+                leftIcon={<MdMailOutline size={24} className="text-black" />}
               />
             </div>
             <div>
@@ -108,11 +107,12 @@ const LoginForm = () => {
                   errors={errors}
                   disabled={isPending}
                   placeholder="Fill in your password"
-                  leftIcon={
-                    <TbLockPassword size={24} className="text-black" />
-                  }
+                  leftIcon={<TbLockPassword size={24} className="text-black" />}
                 />
-                <Link href={"/forgot-password"} className="text-base text-right text-black font-medium transition-colors duration-300 cursor-pointer hover:underline">
+                <Link
+                  href={"/forgot-password"}
+                  className="text-base text-right text-black font-medium transition-colors duration-300 cursor-pointer hover:underline"
+                >
                   Forgot password
                 </Link>
               </div>
