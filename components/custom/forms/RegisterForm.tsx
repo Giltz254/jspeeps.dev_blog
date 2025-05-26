@@ -40,11 +40,11 @@ const RegisterForm = () => {
     });
   };
   return (
-    <div className="h-full pt-16 flex items-center justify-center">
-      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white md:border md:border-border md:shadow-sm relative">
+    <div className="h-full py-10 flex items-center justify-center">
+      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white md:border md:border-border md:rounded-md relative">
         <div className="w-full md:w-1/2 p-8">
           <div className="flex px-4 justify-center gap-4 mb-6 h-12 border-b border-border items-center w-full">
-            <BsCodeSquare size={28} className="text-emerald-400" />
+            <BsCodeSquare size={28} className="text-black" />
             <span className="font-extrabold text-2xl">JSPEEPS.DEV</span>
           </div>
           <h2 className="text-2xl font-semibold text-center text-black mb-6">
@@ -64,7 +64,7 @@ const RegisterForm = () => {
                 errors={errors}
                 disabled={isPending}
                 placeholder="Fill in your name"
-                leftIcon={<GoPerson size={24} className="text-emerald-400" />}
+                leftIcon={<GoPerson size={24} className="text-black" />}
               />
             </div>
             <div>
@@ -81,7 +81,7 @@ const RegisterForm = () => {
                 disabled={isPending}
                 placeholder="Fill in your email"
                 leftIcon={
-                  <MdMailOutline size={24} className="text-emerald-400" />
+                  <MdMailOutline size={24} className="text-black" />
                 }
               />
             </div>
@@ -101,7 +101,7 @@ const RegisterForm = () => {
                   disabled={isPending}
                   placeholder="Fill in your password"
                   leftIcon={
-                    <TbLockPassword size={24} className="text-emerald-400" />
+                    <TbLockPassword size={24} className="text-black" />
                   }
                 />
               </div>
@@ -122,7 +122,7 @@ const RegisterForm = () => {
                   placeholder="Fill in your password"
                   disabled={isPending}
                   leftIcon={
-                    <TbLockPassword size={24} className="text-emerald-400" />
+                    <TbLockPassword size={24} className="text-black" />
                   }
                 />
               </div>
@@ -133,16 +133,16 @@ const RegisterForm = () => {
               type="submit"
               disabled={isPending}
               label={isPending ? "Signing up" : "Sign up"}
-              className="border-emerald-400 hover:border-emerald-600 bg-white hover:bg-white"
+              className="w-full"
             />
           </form>
           <div className="text-base mt-6 flex items-center gap-2 font-medium">
-            <span className="font-normal text-gray-800">
+            <span className="font-normal text-gray-700">
               Already have an account?
             </span>
             <Link
               href="/login"
-              className="text-base font-medium text-green-500"
+              className="text-base font-medium text-black hover:underline transition-all duration-300"
             >
               Sign in
             </Link>

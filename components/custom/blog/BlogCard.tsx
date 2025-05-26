@@ -2,13 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { BlogWithUser } from "./ListBlog";
 import Reactions from "./Reactions";
-import { formatTimeFromNow } from "@/lib/utils";
+import formatDate, { Block, calculateReadTime, formatTimeFromNow } from "@/lib/utils";
 
 interface BlogCardProps {
   blog: BlogWithUser;
   isUserProfile?: boolean;
 }
 const BlogCard = ({ blog, isUserProfile }: BlogCardProps) => {
+  let readTime = "0 min read";
+  if (Array.isArray(blog.content)) {
+    const blocks = blog.content as Block[];
+    readTime = calculateReadTime(blocks);
+  }
   return (
     <div className="flex flex-col border-b lg:pr-4">
       <Link
@@ -34,12 +39,10 @@ const BlogCard = ({ blog, isUserProfile }: BlogCardProps) => {
               />
             )}
             <div className="text-sm text-gray-700">
-              <p className="font-medium text-green-700">{blog.user.name}</p>
+              <p className="font-medium text-black">{blog.user.name}</p>
               <div className="text-gray-500 text-sm">
-                <span className="">
-                  {formatTimeFromNow(blog.createdAt)}
-                </span>{" "}
-                · 2 min read
+                <span className="">{formatDate(blog.createdAt)}</span> ·{" "}
+                {readTime}
               </div>
             </div>
           </div>

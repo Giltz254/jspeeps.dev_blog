@@ -64,11 +64,11 @@ const LoginForm = () => {
     });
   };
   return (
-    <div className="h-full pt-16 flex items-center justify-center">
-      <div className="w-full max-w-4xl flex flex-col md:flex-row md:border bg-white md:border-border md:shadow-sm relative">
+    <div className="h-full py-10 flex items-center justify-center">
+      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white md:border md:rounded-md relative">
         <div className="w-full md:w-1/2 p-8">
           <div className="flex px-4 justify-center gap-4 mb-6 h-12 border-b border-border items-center w-full">
-            <BsCodeSquare size={28} className="text-emerald-400" />
+            <BsCodeSquare size={28} className="text-black" />
             <span className="font-extrabold text-2xl">JSPEEPS.DEV</span>
           </div>
           <h2 className="text-2xl font-semibold text-center text-black mb-6">
@@ -89,7 +89,7 @@ const LoginForm = () => {
                 placeholder="Fill in your email"
                 disabled={isPending}
                 leftIcon={
-                  <MdMailOutline size={24} className="text-emerald-400" />
+                  <MdMailOutline size={24} className="text-black" />
                 }
               />
             </div>
@@ -109,11 +109,11 @@ const LoginForm = () => {
                   disabled={isPending}
                   placeholder="Fill in your password"
                   leftIcon={
-                    <TbLockPassword size={24} className="text-emerald-400" />
+                    <TbLockPassword size={24} className="text-black" />
                   }
                 />
-                <Link href={"/forgot-password"} className="text-base text-right text-green-700 font-medium transition-colors duration-300 cursor-pointer hover:underline">
-                  Forgot password?
+                <Link href={"/forgot-password"} className="text-base text-right text-black font-medium transition-colors duration-300 cursor-pointer hover:underline">
+                  Forgot password
                 </Link>
               </div>
             </div>
@@ -124,16 +124,16 @@ const LoginForm = () => {
               type="submit"
               disabled={isPending}
               label={isPending ? "signing in" : "Sign in"}
-              className="border-emerald-400 hover:border-emerald-600 bg-white hover:bg-white"
+              className="w-full cursor-pointer"
             />
           </form>
           <div className="text-base mt-6 flex items-center gap-2 font-medium">
-            <span className="font-normal text-gray-800">
+            <span className="font-normal text-gray-700">
               Don't have an account yet?
             </span>
             <Link
               href="/register"
-              className="text-base font-medium text-green-500"
+              className="text-base font-medium text-black hover:underline transition-all duration-300"
             >
               Register
             </Link>

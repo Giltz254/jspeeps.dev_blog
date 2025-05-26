@@ -19,7 +19,7 @@ const ListBlog = ({
   isUserProfile,
 }: BlogCardProps) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-[calc(100vh-64px)]">
       <section className="">
         {blogs.map((blog) => (
           <BlogCard key={blog.id} blog={blog} isUserProfile={isUserProfile} />

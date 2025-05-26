@@ -42,7 +42,7 @@ const FormField = <T extends FieldValues>({
 
       <div
         className={cn(
-          "w-full flex items-center border-b py-1 px-2 transition-colors focus-within:border-b-emerald-500",
+          "w-full flex items-center border-b py-1 px-2 transition-colors focus-within:border-b-black",
           errors[id] ? "border-b-rose-400" : "border-b-border"
         )}
       >

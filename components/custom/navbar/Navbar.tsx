@@ -5,14 +5,17 @@ import Search from "./Search";
 import Notifications from "./Notifications";
 import UserButton from "./UserButton";
 import { SessionProps } from "@/types";
-const Navbar = ({session}: SessionProps) => {
-  const isLoggedIn = !!session?.user
+const Navbar = ({ session }: SessionProps) => {
+  const isLoggedIn = !!session?.user;
   return (
     <header className="w-full border-b border-gray-200 bg-white h-16 z-50 sticky top-0 left-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Left Section */}
         <div className="flex items-center space-x-4">
-          <Link href="/blog/feed/1" className="text-2xl uppercase font-bold text-black">
+          <Link
+            href="/blog/feed/1"
+            className="text-2xl uppercase font-bold text-black"
+          >
             Jspeeps<span className="text-4xl font-extrabold">.</span>dev
           </Link>
           {/* Search Bar for larger screens */}
@@ -26,7 +29,10 @@ const Navbar = ({session}: SessionProps) => {
             <FiSearch className="text-xl" />
           </div>
 
-          <Link href={'/blog/new'} className="hidden sm:flex items-center text-sm gap-3 max-sm:gap-2 transition">
+          <Link
+            href={"/blog/new"}
+            className="hidden sm:flex items-center text-sm gap-3 max-sm:gap-2 transition"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -55,7 +61,7 @@ const Navbar = ({session}: SessionProps) => {
           ) : (
             <Link
               href={"/login"}
-              className="px-4 py-2 hover:border-b-2 border border-emerald-200 hover:border-b-emerald-500 text-black transition-all duration-300 bg-emerald-50 text-base"
+              className="inline-flex items-center justify-center border align-middle select-none font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-stone-800 hover:bg-stone-700 relative bg-gradient-to-b from-stone-700 to-stone-800 border-stone-900 text-stone-50 rounded-full hover:bg-gradient-to-b hover:from-stone-800 hover:to-stone-800 hover:border-stone-900 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.25),inset_0_-2px_0px_rgba(0,0,0,0.35)] after:pointer-events-none transition antialiased"
             >
               Get started
             </Link>

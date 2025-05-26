@@ -7,7 +7,6 @@ import { MdMailOutline } from "react-icons/md";
 import ReusableButton from "./ReusableButton";
 import { useState, useTransition } from "react";
 import Alert from "./Alert";
-import { useRouter } from "next/navigation";
 import SocialAuth from "./SocialAuth";
 import {
   PasswordEmailSchema,
@@ -19,8 +18,6 @@ const PasswordResetForm = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const [emailSent, setEmailSent] = useState(false);
-  const router = useRouter();
 
   const {
     register,
@@ -49,10 +46,10 @@ const PasswordResetForm = () => {
 
   return (
     <div className="h-full pt-16 flex items-center justify-center">
-      <div className="w-full max-w-4xl flex flex-col md:flex-row md:border bg-white md:border-border md:shadow-sm relative">
+      <div className="w-full max-w-4xl flex flex-col md:flex-row md:border bg-white md:border-border md:rounded-md relative">
         <div className="w-full md:w-1/2 p-8">
           <div className="flex px-4 justify-center gap-4 mb-6 h-12 border-b border-border items-center w-full">
-            <BsCodeSquare size={28} className="text-emerald-400" />
+            <BsCodeSquare size={28} className="text-black" />
             <span className="font-extrabold text-2xl">JSPEEPS.DEV</span>
           </div>
           <h2 className="text-2xl font-semibold text-center text-black mb-6">
@@ -73,19 +70,18 @@ const PasswordResetForm = () => {
                 placeholder="Enter your email"
                 disabled={isPending}
                 leftIcon={
-                  <MdMailOutline size={24} className="text-emerald-400" />
+                  <MdMailOutline size={24} className="text-black" />
                 }
               />
             </div>
 
             {error && <Alert message={error} error />}
             {success && <Alert message={success} success />}
-
             <ReusableButton
               type="submit"
               disabled={isPending}
               label={isPending ? "Sending..." : "Send Password Reset Link"}
-              className="border-emerald-400 hover:border-emerald-600 bg-white hover:bg-white"
+              className="w-full cursor-pointer"
             />
           </form>
         </div>

@@ -4,7 +4,7 @@ import { getBlogBySlug } from "@/actions/blogs/get-blog-by-slug";
 import Alert from "@/components/custom/forms/Alert";
 import { auth } from "@/auth";
 import BlogContent from "@/components/custom/blog/BlogContent";
-import formatDate, { Block, calculateReadTime, formatTimeFromNow } from "@/lib/utils";
+import formatDate, { Block, calculateReadTime } from "@/lib/utils";
 import Reactions from "@/components/custom/blog/Reactions";
 import Toc from "@/components/custom/blog/TableOfContents";
 import { Metadata } from "next";
@@ -36,7 +36,9 @@ export async function generateMetadata({
     openGraph: {
       images: [
         {
-          url: blog.coverImage ?? `${process.env.NEXT_PUBLIC_BASE_URL}/opengraph-image.png`,
+          url:
+            blog.coverImage ??
+            `${process.env.NEXT_PUBLIC_BASE_URL}/opengraph-image.png`,
         },
       ],
     },
@@ -66,9 +68,9 @@ const page = async ({ params }: BlogContentProps) => {
     return <Alert error message="No blog post found!" />;
   }
   if (Array.isArray(blog.content)) {
-  const blocks = blog.content as Block[];
-  readTime = calculateReadTime(blocks);
-}
+    const blocks = blog.content as Block[];
+    readTime = calculateReadTime(blocks);
+  }
   return (
     <main className="max-w-5xl mx-auto px-4 pt-10">
       <h1 className="text-3xl md:text-4xl font-bold mb-2 leading-snug">
@@ -99,6 +101,21 @@ const page = async ({ params }: BlogContentProps) => {
             className="object-cover object-center"
             priority
           />
+          <div className="absolute inset-0 bg-black/30 flex flex-col justify-end p-4">
+            <h1 className="text-white text-xl lg:text-3xl font-bold mb-2">
+              {blog.title}
+            </h1>
+            <div className="flex flex-wrap gap-2">
+              {blog.tags && blog.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="bg-white text-black text-sm px-2 py-1 rounded-full"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       )}
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-64px)]">
