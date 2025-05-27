@@ -71,7 +71,7 @@ const Toc = ({ selector }: { selector: string }) => {
   }, [currentHeadingID]);
 
   return (
-    <div className="w-full pt-4" ref={listWrapperRef}>
+    <div className="w-full" ref={listWrapperRef}>
       <div className="flex justify-start">
         <p className="capitalize text-lg font-semibold">
           In this page

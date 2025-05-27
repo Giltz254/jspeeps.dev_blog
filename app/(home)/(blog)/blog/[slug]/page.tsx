@@ -92,32 +92,32 @@ const page = async ({ params }: BlogContentProps) => {
         userId={session?.user.id}
         slug={slug}
       />
-      {blog.coverImage && (
-        <div className="w-full h-64 lg:h-96 relative overflow-hidden shadow-md">
-          <Image
-            src={blog.coverImage}
-            alt={blog.title}
-            fill
-            className="object-cover object-center"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/30 flex flex-col justify-end p-4">
-            <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl text-white">
-              {blog.title}
-            </h1>
-            <div className="flex flex-wrap gap-2 pt-4">
-              {blog.tags && blog.tags[0] && (
-                <span className="bg-white text-black text-sm px-2 py-1 rounded-full">
-                  {blog.tags[0]}
-                </span>
-              )}
+      <div className="flex flex-col lg:flex-row-reverse min-h-[calc(100vh-64px)]">
+        <div className="flex-1 lg:border-l lg:border-t border-border">
+          {blog.coverImage && (
+            <div className="w-full h-72 sm:h-96 relative overflow-hidden shadow-md">
+              <Image
+                src={blog.coverImage}
+                alt={blog.title}
+                fill
+                className="object-cover object-center"
+                priority
+              />
+              <div className="absolute inset-0 bg-black/30 flex flex-col justify-end p-4">
+                <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl text-white">
+                  {blog.title}
+                </h1>
+                <div className="flex flex-wrap gap-2 pt-4">
+                  {blog.tags && blog.tags[0] && (
+                    <span className="bg-white text-black text-sm px-2 py-1 rounded-full">
+                      {blog.tags[0]}
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-64px)]">
-        <div className="flex-1 lg:border-r lg:border-t border-border">
-          <article className="lg:pr-4 content">
+          )}
+          <article className="lg:pl-4 content">
             {Array.isArray(blog.content) &&
               blog.content.map((blogItem, i) => (
                 <div key={i} className="my-4 md:my-8">
@@ -126,7 +126,7 @@ const page = async ({ params }: BlogContentProps) => {
               ))}
           </article>
         </div>
-        <aside className="w-full lg:w-1/3 py-6 flex flex-col lg:sticky lg:h-[calc(100vh-64px)] lg:overflow-y-clip hover:lg:overflow-y-scroll lg:px-4 lg:top-16 gap-6 lg:transition-all lg:duration-500">
+        <aside className="w-full lg:w-1/3 pb-6 flex flex-col lg:sticky lg:h-[calc(100vh-64px)] lg:overflow-y-clip hover:lg:overflow-y-scroll lg:px-4 lg:top-16 gap-6 lg:transition-all lg:duration-500">
           <Toc selector=".content" />
         </aside>
       </div>

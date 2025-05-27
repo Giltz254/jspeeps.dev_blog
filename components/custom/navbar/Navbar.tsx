@@ -5,6 +5,7 @@ import Search from "./Search";
 import Notifications from "./Notifications";
 import UserButton from "./UserButton";
 import { SessionProps } from "@/types";
+import { Braces, Monitor } from "lucide-react";
 const Navbar = ({ session }: SessionProps) => {
   const isLoggedIn = !!session?.user;
   return (
@@ -14,17 +15,18 @@ const Navbar = ({ session }: SessionProps) => {
         <div className="flex items-center space-x-4">
           <Link
             href="/blog/feed/1"
-            className="text-2xl uppercase font-bold text-black"
+            className="relative flex items-center justify-center h-16 w-16 hover:opacity-90 transition-opacity"
           >
-            Jspeeps<span className="text-4xl font-extrabold">.</span>dev
+            <div className="absolute inset-0 m-auto w-12 h-12 rounded-full border-2 border-black" />
+            <span
+              className="relative z-10 uppercase px-1 text-black mr-[-0.25rem] ml-[-0.25rem] font-semibold text-base select-none bg-white"
+            >
+              Jspeeps
+            </span>
           </Link>
-          {/* Search Bar for larger screens */}
           <Search />
         </div>
-
-        {/* Right Section */}
         <div className="flex items-center space-x-4">
-          {/* Search Icon for small screens */}
           <div className="sm:hidden">
             <FiSearch className="text-xl" />
           </div>
@@ -54,8 +56,6 @@ const Navbar = ({ session }: SessionProps) => {
           </Link>
 
           {isLoggedIn && <Notifications />}
-
-          {/* Avatar */}
           {isLoggedIn ? (
             <UserButton session={session} />
           ) : (
