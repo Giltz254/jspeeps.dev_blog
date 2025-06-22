@@ -11,27 +11,27 @@ interface BlogFeedProps {
   params: Promise<{ page: string }>;
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }
-export async function generateStaticParams({ params }: {params: { page: string }}) {
-  const { page } = await params;
-  const currentPage = parseInt(page, 20) || 1;
-  const limit: number = 20;
-  const { success, error } = await getPublishedBlogs({
-    page: currentPage,
-    limit
-  });
-  if (!success) {
-    return []
-  }
-  if(error) {
-    return []
-  }
-  const { totalPages } = success;
-  const staticParams = [];
-  for (let i = 1; i <= totalPages; i++) {
-    staticParams.push({ page: i.toString() });
-  }
-  return staticParams;
-}
+// export async function generateStaticParams({ params }: {params: { page: string }}) {
+//   const { page } = await params;
+//   const currentPage = parseInt(page, 20) || 1;
+//   const limit: number = 20;
+//   const { success, error } = await getPublishedBlogs({
+//     page: currentPage,
+//     limit
+//   });
+//   if (!success) {
+//     return []
+//   }
+//   if(error) {
+//     return []
+//   }
+//   const { totalPages } = success;
+//   const staticParams = [];
+//   for (let i = 1; i <= totalPages; i++) {
+//     staticParams.push({ page: i.toString() });
+//   }
+//   return staticParams;
+// }
 export const metadata: Metadata = {
   title: {
     absolute: "The Jspeeps blog",

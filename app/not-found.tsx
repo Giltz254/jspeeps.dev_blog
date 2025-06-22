@@ -3,7 +3,6 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="w-full h-[calc(100vh-64px)] relative flex flex-col items-center justify-center bg-gray-50/20 px-6 lg:px-8 overflow-hidden">
-      {/* Animated SVG Blob */}
       <svg
         className="absolute -top-20 -left-20 w-[500px] h-[500px] animate-blob opacity-30 text-emerald-300"
         viewBox="0 0 200 200"
@@ -21,7 +20,6 @@ export default function NotFound() {
           <h2 className="text-4xl font-extrabold text-black text-center">
             404 - Not Found
           </h2>
-          {/* Compass SVG */}
           <svg
             className="w-12 h-12 text-emerald-500 animate-spin-slow"
             viewBox="0 0 64 64"
