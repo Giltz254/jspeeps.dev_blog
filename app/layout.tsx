@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Lora } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/custom/layout/Footer";
+import NextTopLoader from 'nextjs-toploader';
 
 
 const lora = Lora({
@@ -31,6 +32,14 @@ export default function RootLayout({
       <body
         className={`${lora.className} antialiased`}
       >
+      <div>
+        <NextTopLoader
+          color="#4F46E5"
+          showSpinner={false}
+          height={3}
+          shadow="0 0 10px rgba(79, 70, 229, 0.5)"
+        />
+      </div>
         {children}
         <Footer />
       </body>
