@@ -1,16 +1,20 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
-export default function CategoryNav({ tags }: { tags: string[] | [] }) {
+export default function CategoryNav({ tags }: { tags: string[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
-  const searchParams = useSearchParams();
-  const currentTag = searchParams.get("tag");
+  const pathname = usePathname();
+
+  const currentTag = pathname.startsWith("/tags/")
+    ? decodeURIComponent(pathname.split("/tags/")[1])
+    : null;
 
   const checkScroll = () => {
     const el = scrollRef.current;
@@ -26,22 +30,43 @@ export default function CategoryNav({ tags }: { tags: string[] | [] }) {
     el.scrollBy({ left: scrollAmount, behavior: "smooth" });
     setTimeout(checkScroll, 300);
   };
+  const scrollActiveTagIntoView = useCallback(() => {
+    const index = tags.findIndex(
+      (tag) => tag.replace(/\s+/g, "-") === currentTag
+    );
+    const activeTagEl = tagRefs.current[index];
+    if (activeTagEl) {
+      activeTagEl.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+  }, [currentTag, tags]);
+
   useEffect(() => {
     checkScroll();
     const el = scrollRef.current;
 
     if (el) {
       el.addEventListener("scroll", checkScroll);
-      window.addEventListener("resize", checkScroll);
     }
+    window.addEventListener("resize", checkScroll);
+    window.addEventListener("resize", scrollActiveTagIntoView);
+
     return () => {
       if (el) el.removeEventListener("scroll", checkScroll);
       window.removeEventListener("resize", checkScroll);
+      window.removeEventListener("resize", scrollActiveTagIntoView);
     };
-  }, []);
+  }, [scrollActiveTagIntoView]);
+
+  useEffect(() => {
+    scrollActiveTagIntoView();
+  }, [scrollActiveTagIntoView]);
 
   return (
-    <div className="relative flex items-center w-full h-full overflow-hidden bg-white max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="relative font-[family-name:var(--font-eb-garamond)] flex items-center w-full h-full overflow-hidden bg-white max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {showLeft && (
         <button
           onClick={() => scroll("left")}
@@ -57,7 +82,7 @@ export default function CategoryNav({ tags }: { tags: string[] | [] }) {
       >
         <Link
           href={`/blog/feed/1`}
-          className={`text-base cursor-pointer transition-all duration-300 relative h-full flex items-center ${
+          className={`text-sm cursor-pointer transition-all duration-300 relative h-full flex items-center ${
             !currentTag ? "text-black" : "text-gray-800 hover:text-black"
           }`}
         >
@@ -70,14 +95,18 @@ export default function CategoryNav({ tags }: { tags: string[] | [] }) {
         {tags.map((tag, index) => {
           const formattedTag = tag.replace(/\s+/g, "-");
           const isActive = currentTag === formattedTag;
+
           return (
             <Link
-              href={`/blog/feed/1?tag=${formattedTag}`}
+              href={`/tags/${formattedTag}`}
               key={index}
               className="h-full flex items-center"
             >
               <span
-                className={`text-base cursor-pointer transition-all h-full flex items-center duration-300 relative ${
+                ref={(el) => {
+                  tagRefs.current[index] = el;
+                }}
+                className={`text-sm capitalize cursor-pointer transition-all h-full flex items-center duration-300 relative ${
                   isActive ? "text-black" : "text-gray-800 hover:text-black"
                 }`}
               >

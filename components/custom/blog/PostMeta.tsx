@@ -1,4 +1,5 @@
 'use client';
+import formatDate from '@/lib/utils';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -6,7 +7,7 @@ interface PostMetaProps {
   author: string;
   avatar: string;
   readTime: string;
-  date: string;
+  date: Date;
 }
 
 const PostMeta = ({ author, avatar, readTime, date }: PostMetaProps) => {
@@ -43,7 +44,7 @@ const PostMeta = ({ author, avatar, readTime, date }: PostMetaProps) => {
       <span className="hidden sm:inline">•</span>
       <span>{readTime}</span>
       <span className="hidden sm:inline">•</span>
-      <span>{date}</span>
+      <span>{formatDate(date)}</span>
     </div>
   );
 };

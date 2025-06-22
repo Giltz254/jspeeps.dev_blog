@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import { EB_Garamond, Gelasio } from "next/font/google";
+import { Lora } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/custom/layout/Footer";
 
-const ebGaramond = EB_Garamond({
-  variable: "--font-geist-sans",
+
+const lora = Lora({
+  variable: "--font-lora",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(`${process.env.NEXT_PUBLIC_BASE_URL}`),
   title:{
     default: "Hub for JavaScript, Web Dev & Tech Trends",
     template: "%s - Jspeeps.Dev"
@@ -27,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${ebGaramond.className} antialiased`}
+        className={`${lora.className} antialiased`}
       >
         {children}
         <Footer />

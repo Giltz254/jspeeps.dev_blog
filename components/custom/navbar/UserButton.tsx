@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -17,6 +16,7 @@ import { BiSolidUser } from "react-icons/bi";
 import { IoBookmarkSharp } from "react-icons/io5";
 import { PiSignOutFill } from "react-icons/pi";
 import { SessionProps } from "@/types";
+import { signOut } from "next-auth/react";
 
 const UserButton = ({ session }: SessionProps) => {
   const [open, setOpen] = useState(false);
@@ -79,11 +79,11 @@ const UserButton = ({ session }: SessionProps) => {
             {session.user.name}
           </DropdownMenuLabel>
         </div>
-        <DropdownMenuItem className="max-w-xs" onClick={() => handleClick(`/user/${session.user.username}`)}>
+        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick(`/user/${session.user.username}`)}>
           <BiSolidUser size={24} />
           <span className="font-normal text-base">Profile</span>
         </DropdownMenuItem>
-        <DropdownMenuItem className="max-w-xs" onClick={() => handleClick("/blog/new")}>
+        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick("/blog/new")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -104,19 +104,19 @@ const UserButton = ({ session }: SessionProps) => {
           <span className="font-normal text-base">Create Article</span>
         </DropdownMenuItem>
 
-        <DropdownMenuItem className="max-w-xs" onClick={() => handleClick("/bookmarks")}>
+        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick("/bookmarks/1")}>
           <IoBookmarkSharp size={24} />
           <span className="font-normal text-base">Bookmarked Articles</span>
         </DropdownMenuItem>
 
-        <DropdownMenuItem className="max-w-xs" onClick={() => handleClick("/dashboard")}>
+        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick("/dashboard")}>
           <AiFillDashboard size={24} />
           <span className="font-normal text-base">Dashboard</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem className="max-w-xs" onClick={() => handleClick("/signout")}>
+        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => signOut()}>
           <PiSignOutFill size={24} />
           <span className="font-normal text-base">Sign Out</span>
         </DropdownMenuItem>

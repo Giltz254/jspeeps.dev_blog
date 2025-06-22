@@ -1,23 +1,34 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Image from "next/image";
-import { getBlogBySlug } from "@/actions/blogs/get-blog-by-slug";
+import { getBlogByIdOrSlug } from "@/actions/blogs/get-blog-by-slug";
 import Alert from "@/components/custom/forms/Alert";
-import { auth } from "@/auth";
 import BlogContent from "@/components/custom/blog/BlogContent";
-import formatDate, { Block, calculateReadTime } from "@/lib/utils";
+import { Block, calculateReadTime } from "@/lib/utils";
 import Reactions from "@/components/custom/blog/Reactions";
-import Toc from "@/components/custom/blog/TableOfContents";
 import { Metadata } from "next";
 import { getPublishedBlogsSlugs } from "@/actions/blogs/get-published-blogs-slug";
 import PostMeta from "@/components/custom/blog/PostMeta";
+import { getUserId } from "@/lib/userId";
+const Comments = dynamic(() => import("@/components/custom/comments/Comments"));
+const Toc = dynamic(() => import("@/components/custom/blog/TableOfContents"));
+import { HiLightBulb } from "react-icons/hi";
+import CommentsLoader from "@/components/custom/comments/CommentsLoader";
+import dynamic from "next/dynamic";
+import ArticleCard, {
+  ArtcleCardProps,
+} from "@/components/custom/blog/ArtcleCard";
 interface BlogContentProps {
   params: Promise<{ slug: string }>;
 }
+type BlogSlug = {
+  slug: string;
+  updatedAt: Date;
+};
 export async function generateMetadata({
   params,
 }: BlogContentProps): Promise<Metadata> {
   const { slug } = await params;
-  const res = await getBlogBySlug({ slug });
+  const res = await getBlogByIdOrSlug({ slug });
 
   if (!res.success || !res.success.blog) {
     return {
@@ -45,34 +56,46 @@ export async function generateMetadata({
   };
 }
 export async function generateStaticParams() {
-  const slugsWithDate = await getPublishedBlogsSlugs();
+  const result = await getPublishedBlogsSlugs();
+  if (result && typeof result === 'object' && 'error' in result) {
+    console.error("Error fetching published blog slugs for static params:", result.error);
+    return [];
+  }
+  const slugsWithDate: BlogSlug[] = result as BlogSlug[];
+
   if (!slugsWithDate || slugsWithDate.length === 0) {
     return [];
   }
   return slugsWithDate.map(({ slug }) => ({ slug }));
 }
 const page = async ({ params }: BlogContentProps) => {
-  const session = await auth();
   const { slug } = await params;
   let readTime = "0 min read";
-  const res = await getBlogBySlug({ slug });
+  const res = await getBlogByIdOrSlug({ slug });
   if (!res.success) {
     return (
-      <div className="max-w-md mx-auto">
-        <Alert error message="Error fetching blog content!" />
+      <div className="max-w-lg mx-auto px-4 sm:px-6 h-[calc(100vh-64px)] flex items-center justify-center w-full mt-10">
+        <Alert error message="Error fetching blogs!" showRedirectLink />
       </div>
     );
   }
-  const blog = res.success.blog;
+  const { blog, relatedBlogs }: { relatedBlogs: ArtcleCardProps[]; blog: any } =
+    res.success;
   if (!blog) {
-    return <Alert error message="No blog post found!" />;
+    return (
+      <div className="max-w-lg mx-auto px-4 sm:px-6 h-[calc(100vh-64px)] flex items-center justify-center w-full mt-10">
+        {" "}
+        <Alert error message="No blog post found!" showRedirectLink />
+      </div>
+    );
   }
   if (Array.isArray(blog.content)) {
     const blocks = blog.content as Block[];
     readTime = calculateReadTime(blocks);
   }
+  const userId = await getUserId();
   return (
-    <main className="max-w-5xl mx-auto px-4 pt-10">
+    <main className="max-w-6xl mx-auto px-4 pt-10">
       <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl text-black">
         {blog.title}
       </h1>
@@ -82,18 +105,23 @@ const page = async ({ params }: BlogContentProps) => {
           author={blog.user.name}
           avatar={blog.user.image}
           readTime={readTime}
-          date={formatDate(blog.createdAt)}
+          date={blog.createdAt}
         />
       )}
 
       <Reactions
-        author={blog.user.id}
         isSingleBlogPage={true}
-        userId={session?.user.id}
+        blogId={blog.id}
+        claps={blog._count.claps}
+        Clapped={!!blog.claps.length}
+        userId={userId}
+        author={blog.user.id}
+        bookmarked={!!blog.bookmarks.length}
+        comments={blog._count.comments}
         slug={slug}
       />
-      <div className="flex flex-col lg:flex-row-reverse min-h-[calc(100vh-64px)]">
-        <div className="flex-1 lg:border-l lg:border-t border-border">
+      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-64px)]">
+        <div className="flex-1 lg:border-r lg:pr-4 pt-4 border-border">
           {blog.coverImage && (
             <div className="w-full h-72 sm:h-96 relative overflow-hidden shadow-md">
               <Image
@@ -101,34 +129,78 @@ const page = async ({ params }: BlogContentProps) => {
                 alt={blog.title}
                 fill
                 className="object-cover object-center"
-                priority
+                priority={false}
+                sizes="(max-width: 1024px) 100vw, (min-width: 1024px) 60vw, 60vw"
               />
-              <div className="absolute inset-0 bg-black/30 flex flex-col justify-end p-4">
-                <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl text-white">
-                  {blog.title}
-                </h1>
-                <div className="flex flex-wrap gap-2 pt-4">
-                  {blog.tags && blog.tags[0] && (
-                    <span className="bg-white text-black text-sm px-2 py-1 rounded-full">
-                      {blog.tags[0]}
-                    </span>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent px-6 py-4">
+                <div className="flex flex-col gap-3">
+                  <h1 className="text-white font-semibold text-lg md:text-2xl lg:text-3xl leading-snug">
+                    {blog.title}
+                  </h1>
+                  {blog.tags && blog.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {blog.tags.slice(0, 3).map((tag: string, idx: number) => (
+                        <span
+                          key={idx}
+                          className="bg-white/20 text-white text-xs md:text-sm px-3 py-1 rounded-full backdrop-blur-sm border border-white/30"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
             </div>
           )}
+          {blog.summary && (
+            <div className="relative p-4 border-2 border-sky-400 bg-sky-50 text-sky-900 mt-8 w-full rounded-lg shadow-sm">
+              <span className="absolute rounded-t-lg -top-3 left-4 bg-sky-50 px-3 py-0.5 text-sm text-sky-700 font-semibold flex items-center gap-1">
+                <HiLightBulb className="text-sky-500" />
+                Blog Summary
+              </span>
+              <p className="w-full text-base font-normal text-sky-900">
+                {blog.summary}
+              </p>
+            </div>
+          )}
           <article className="lg:pl-4 content">
             {Array.isArray(blog.content) &&
-              blog.content.map((blogItem, i) => (
+              blog.content.map((blogItem: any, i: number) => (
                 <div key={i} className="my-4 md:my-8">
                   <BlogContent blog={blogItem} />
                 </div>
               ))}
           </article>
+          <Suspense fallback={<CommentsLoader text="Loading comments..." />}>
+            <Comments
+              userId={userId ?? undefined}
+              blogId={blog.id}
+              creatorId={blog.userId}
+            />
+          </Suspense>
         </div>
-        <aside className="w-full lg:w-1/3 pb-6 flex flex-col lg:sticky lg:h-[calc(100vh-64px)] lg:overflow-y-clip hover:lg:overflow-y-scroll lg:px-4 lg:top-16 gap-6 lg:transition-all lg:duration-500">
-          <Toc selector=".content" />
+        <aside className="w-full lg:w-1/3 pb-6 pt-4 flex flex-col lg:sticky lg:h-[calc(100vh-64px)] lg:overflow-y-clip hover:lg:overflow-y-scroll lg:px-4 lg:top-16 gap-6 lg:transition-all lg:duration-500">
+          <div className="hidden lg:block">
+            <Toc selector=".content" />
+          </div>
         </aside>
+      </div>
+      <div className="border-t border-t-border flex flex-col py-10">
+        <div className="flex flex-col mt-4">
+          {relatedBlogs && relatedBlogs.length > 0 && (
+            <>
+              <h2 className="text-2xl font-semibold text-black mb-10">
+                Related Articles
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+                {relatedBlogs.map((blog) => (
+                  <ArticleCard blog={blog} key={blog.id} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </main>
   );

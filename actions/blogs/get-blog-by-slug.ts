@@ -1,28 +1,31 @@
-"use server";
+export const getBlogByIdOrSlug = async ({
+  id,
+  slug,
+}: {
+  id?: string;
+  slug?: string;
+}) => {
+  if (!id && !slug) {
+    return { error: "Either 'id' or 'slug' must be provided." };
+  }
+  const url = id
+    ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/_?id=${id}`
+    : `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/${slug}`;
+  const res = await fetch(url, {
+    cache: id ? "no-store" : "force-cache",
+    next: {
+      tags: ["blogs"],
+    },
+  });
 
-import { db } from "@/lib/db";
-
-export const getBlogBySlug = async ({slug}: {slug: string }) => {
-    if (!slug) {
-        return { error: "Missing Slug!"}
-    }
-    try {
-        const blog = await db.blog.findUnique({
-            where: {
-                slug
-            },
-            include: {
-                user: {
-                    select: {
-                        id: true,
-                        name: true,
-                        image: true,
-                    }
-                }
-            }
-        })
-        return { success: { blog }}
-    } catch (error) {
-        return { error: "Something went wrong! Please try again"}
-    }
-}
+  if (!res.ok) {
+    return { error: "Blog fetch failed" };
+  }
+  const data = await res.json();
+  return {
+    success: {
+      blog: data.blog,
+      relatedBlogs: data.relatedBlogs
+    },
+  };
+};

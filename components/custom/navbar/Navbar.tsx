@@ -5,22 +5,18 @@ import Search from "./Search";
 import Notifications from "./Notifications";
 import UserButton from "./UserButton";
 import { SessionProps } from "@/types";
-import { Braces, Monitor } from "lucide-react";
 const Navbar = ({ session }: SessionProps) => {
   const isLoggedIn = !!session?.user;
   return (
-    <header className="w-full border-b border-gray-200 bg-white h-16 z-50 sticky top-0 left-0">
+    <header className="w-full border-b border-gray-200 bg-white h-16 z-50 sticky top-0 left-0 font-[family-name:var(--font-eb-garamond)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Left Section */}
         <div className="flex items-center space-x-4">
           <Link
             href="/blog/feed/1"
-            className="relative flex items-center justify-center h-16 w-16 hover:opacity-90 transition-opacity"
+            className="relative flex items-center justify-center h-16 w-16 hover:opacity-90 transition-opacity font-[family-name:var(--font-lora)]"
           >
             <div className="absolute inset-0 m-auto w-12 h-12 rounded-full border-2 border-black" />
-            <span
-              className="relative z-10 uppercase px-1 text-black mr-[-0.25rem] ml-[-0.25rem] font-semibold text-base select-none bg-white"
-            >
+            <span className="relative z-10 uppercase px-1 text-black mr-[-0.25rem] ml-[-0.25rem] font-semibold text-base select-none bg-white">
               Jspeeps
             </span>
           </Link>
@@ -60,10 +56,13 @@ const Navbar = ({ session }: SessionProps) => {
             <UserButton session={session} />
           ) : (
             <Link
-              href={"/login"}
-              className="inline-flex items-center justify-center border align-middle select-none font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-stone-800 hover:bg-stone-700 relative bg-gradient-to-b from-stone-700 to-stone-800 border-stone-900 text-stone-50 rounded-full hover:bg-gradient-to-b hover:from-stone-800 hover:to-stone-800 hover:border-stone-900 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.25),inset_0_-2px_0px_rgba(0,0,0,0.35)] after:pointer-events-none transition antialiased"
+              href="/login"
+              className="inline-block px-5 py-2.5 text-white text-sm font-medium rounded-md shadow-sm transition duration-300 ease-in-out
+             bg-gradient-to-r from-slate-500 via-blue-500 to-blue-600
+             hover:from-slate-600 hover:via-blue-600 hover:to-blue-700
+             focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2"
             >
-              Get started
+              Get Started
             </Link>
           )}
         </div>

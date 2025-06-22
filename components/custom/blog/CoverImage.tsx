@@ -20,7 +20,6 @@ const CoverImage = ({
 }: CoverImageProps) => {
   const { edgestore } = useEdgeStore();
   const handleRemoveCover = async (url: string) => {
-    console.log("URL>>>", url);
     try {
       await edgestore.publicFiles.delete({ url });
       setUploadedCover(undefined);
@@ -35,6 +34,7 @@ const CoverImage = ({
         src={url}
         fill
         alt="Cover image"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
         className="object-cover object-center transition-transform duration-200 group-hover:scale-105"
       />
       {isEditor && (

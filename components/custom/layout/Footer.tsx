@@ -5,7 +5,7 @@ const Footer = () => {
     const date = new Date()
     const year = date.getFullYear()
   return (
-    <footer className="bg-white border-t border-border">
+    <footer className="bg-white border-t border-border font-[family-name:var(--font-eb-garamond)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between py-6">
           <div className="flex flex-col md:flex-row items-center space-x-10">
@@ -18,17 +18,17 @@ const Footer = () => {
             </div>
           </div>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link href="https://x.com/Godffre02145902"><FaTwitter className="text-gray-600 hover:text-black" size={18} /></Link>
-            <Link href="#"><FaFacebookF className="text-gray-600 hover:text-black" size={18} /></Link>
-            <Link href="#"><FaInstagram className="text-gray-600 hover:text-black" size={18} /></Link>
+            <Link target="_blank" href="https://x.com/Godffre02145902"><FaTwitter className="text-gray-600 hover:text-black" size={18} /></Link>
+            <Link target="_blank" href="https://www.facebook.com/profile.php?id=61565065531074"><FaFacebookF className="text-gray-600 hover:text-black" size={18} /></Link>
+            <Link target="_blank" href="https://www.instagram.com/jspeeps.dev/"><FaInstagram className="text-gray-600 hover:text-black" size={18} /></Link>
             <Link target="_blank" href="https://github.com/Giltz254"><FaGithub className="text-gray-600 hover:text-black" size={18} /></Link>
           </div>
         </div>
         <div className="border-t border-gray-200 pt-4 pb-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-600">
           <span>© Copyright {year}, All Rights Reserved</span>
           <div className="flex space-x-4 mt-2 md:mt-0">
-            <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
-            <Link href="/terms" className="hover:underline">Terms & Conditions</Link>
+            <Link href="/jspeeps-privacy-policy" className="hover:underline">Privacy Policy</Link>
+            <Link href="/jspeeps-terms-of-service" className="hover:underline">Terms & Conditions</Link>
           </div>
         </div>
       </div>

@@ -2,24 +2,20 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormField from "./FormField";
-import { BsCodeSquare } from "react-icons/bs";
 import { MdMailOutline } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import ReusableButton from "./ReusableButton";
-import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
-import Link from "next/link";
-import { GoPerson } from "react-icons/go";
 import { RegisterSchema, RegisterSchemaType } from "@/schemas/RegisterSchema";
 import { SignUp } from "@/actions/auth/Register";
-import { useState, useTransition } from "react";
-import Alert from "./Alert";
+import { useTransition } from "react";
 import SocialAuth from "./SocialAuth";
+import Link from "next/link";
+import { User } from "lucide-react";
+import Logo from "./Logo";
+import { showErrorToast, showSuccessToast } from "../layout/Toasts";
 
 const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
   const {
     register,
     handleSubmit,
@@ -27,13 +23,13 @@ const RegisterForm = () => {
     formState: { errors },
   } = useForm<RegisterSchemaType>({ resolver: zodResolver(RegisterSchema) });
   const handleSubmitForm: SubmitHandler<RegisterSchemaType> = (data) => {
-    setError("");
-    setSuccess("");
     startTransition(() => {
       SignUp(data).then((res) => {
-        setError(res.error);
-        setSuccess(res.success);
+        if (res.error) {
+          showErrorToast(res.error);
+        }
         if (res.success) {
+          showSuccessToast(res.success);
           reset();
         }
       });
@@ -41,11 +37,10 @@ const RegisterForm = () => {
   };
   return (
     <div className="h-full py-10 flex items-center justify-center">
-      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white md:border md:border-border md:rounded-md relative">
+      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white relative">
         <div className="w-full md:w-1/2 p-8">
-          <div className="flex px-4 justify-center gap-4 mb-6 h-12 border-b border-border items-center w-full">
-            <BsCodeSquare size={28} className="text-black" />
-            <span className="font-extrabold text-2xl">JSPEEPS.DEV</span>
+          <div className="flex px-4 justify-center gap-4 mb-6 h-12 items-center w-full">
+            <Logo />
           </div>
           <h2 className="text-2xl font-semibold text-center text-black mb-6">
             Register an account?
@@ -64,7 +59,7 @@ const RegisterForm = () => {
                 errors={errors}
                 disabled={isPending}
                 placeholder="Fill in your name"
-                leftIcon={<GoPerson size={24} className="text-black" />}
+                leftIcon={<User size={24} className="text-black" />}
               />
             </div>
             <div>
@@ -80,9 +75,7 @@ const RegisterForm = () => {
                 errors={errors}
                 disabled={isPending}
                 placeholder="Fill in your email"
-                leftIcon={
-                  <MdMailOutline size={24} className="text-black" />
-                }
+                leftIcon={<MdMailOutline size={24} className="text-black" />}
               />
             </div>
             <div>
@@ -100,9 +93,7 @@ const RegisterForm = () => {
                   errors={errors}
                   disabled={isPending}
                   placeholder="Fill in your password"
-                  leftIcon={
-                    <TbLockPassword size={24} className="text-black" />
-                  }
+                  leftIcon={<TbLockPassword size={24} className="text-black" />}
                 />
               </div>
             </div>
@@ -121,14 +112,10 @@ const RegisterForm = () => {
                   errors={errors}
                   placeholder="Fill in your password"
                   disabled={isPending}
-                  leftIcon={
-                    <TbLockPassword size={24} className="text-black" />
-                  }
+                  leftIcon={<TbLockPassword size={24} className="text-black" />}
                 />
               </div>
             </div>
-            {error && <Alert message={error} error />}
-            {success && <Alert message={success} success />}
             <ReusableButton
               type="submit"
               disabled={isPending}

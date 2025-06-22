@@ -1,10 +1,8 @@
 "use client";
 
-import { BsCodeSquare } from "react-icons/bs";
 import FormField from "./FormField";
-import Alert from "./Alert";
 import ReusableButton from "./ReusableButton";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TbLockPassword } from "react-icons/tb";
@@ -12,11 +10,11 @@ import SocialAuth from "./SocialAuth";
 import { PasswordResetShema, PasswordResetShemaType } from "@/schemas/PasswordResetShema";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PasswordReset } from "@/actions/auth/password-reset";
+import Logo from "./Logo";
+import { showErrorToast, showSuccessToast } from "../layout/Toasts";
 
 const NewPasswordForm = () => {
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
   const searchParams = useSearchParams();
   const router = useRouter()
   const token = searchParams.get("token") ?? undefined;
@@ -26,16 +24,13 @@ const NewPasswordForm = () => {
     formState: { errors },
   } = useForm<PasswordResetShemaType>({ resolver: zodResolver(PasswordResetShema) });
   const handleSubmitForm: SubmitHandler<PasswordResetShemaType> = async (data) => {
-    setError("");
-    setSuccess("");
-
-    startTransition(() => {
+   startTransition(() => {
         PasswordReset(data, token).then(res => {
             if (res.error) {
-                setError(res.error)
+                showErrorToast(res.error)
             }
             if (res.success) {
-                setSuccess(res.success)
+                showSuccessToast(res.success)
                 router.replace("/login")
             }
         })
@@ -43,14 +38,13 @@ const NewPasswordForm = () => {
   };
   return (
     <div className="h-full pt-16 flex items-center justify-center">
-      <div className="w-full max-w-4xl flex flex-col md:flex-row md:border bg-white md:border-border md:shadow-sm relative">
+      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white relative">
         <div className="w-full md:w-1/2 p-8">
-          <div className="flex px-4 justify-center gap-4 mb-6 h-12 border-b border-border items-center w-full">
-            <BsCodeSquare size={28} className="text-emerald-400" />
-            <span className="font-extrabold text-2xl">JSPEEPS.DEV</span>
+          <div className="flex px-4 justify-center gap-4 mb-6 h-12 items-center w-full">
+            <Logo />
           </div>
           <h2 className="text-2xl font-semibold text-center text-black mb-6">
-            Set a new password?
+            Set a new password
           </h2>
           <form className="space-y-6" onSubmit={handleSubmit(handleSubmitForm)}>
             <div>
@@ -58,7 +52,7 @@ const NewPasswordForm = () => {
                 htmlFor="password"
                 className="block text-sm font-medium uppercase mb-4 text-black"
               >
-                New Password
+                Password
               </label>
               <div className="relative">
                 <FormField
@@ -69,7 +63,7 @@ const NewPasswordForm = () => {
                   disabled={isPending}
                   placeholder="Fill in your password"
                   leftIcon={
-                    <TbLockPassword size={24} className="text-emerald-400" />
+                    <TbLockPassword size={24} className="text-black" />
                   }
                 />
               </div>
@@ -90,18 +84,16 @@ const NewPasswordForm = () => {
                   disabled={isPending}
                   placeholder="Fill in your password"
                   leftIcon={
-                    <TbLockPassword size={24} className="text-emerald-400" />
+                    <TbLockPassword size={24} className="text-black" />
                   }
                 />
               </div>
             </div>
-            {error && <Alert message={error} error />}
-            {success && <Alert message={success} success />}
             <ReusableButton
               type="submit"
               disabled={isPending}
               label={isPending ? "saving" : "Save"}
-              className="border-emerald-400 hover:border-emerald-600 bg-white hover:bg-white"
+              className="w-full"
             />
           </form>
         </div>

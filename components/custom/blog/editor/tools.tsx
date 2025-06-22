@@ -10,6 +10,8 @@ import CodeTool from "@editorjs/code";
 import Table from "@editorjs/table";
 import InlineCode from "@editorjs/inline-code";
 import Marker from "@editorjs/marker";
+import ColorPicker from "editorjs-color-picker";
+import { ToolConstructable } from "@editorjs/editorjs";
 export const getTools = (uploadImageByFile: (file: File) => Promise<any>) => ({
   embed: Embed,
   list: {
@@ -19,6 +21,9 @@ export const getTools = (uploadImageByFile: (file: File) => Promise<any>) => ({
   image: {
     class: ImageTool,
     config: {
+      features: {
+        caption: "optional",
+      },
       uploader: {
         uploadByUrl: async (url: string) => ({
           success: 1,
@@ -38,7 +43,16 @@ export const getTools = (uploadImageByFile: (file: File) => Promise<any>) => ({
   marker: Marker,
   checklist: Checklist,
   raw: RawTool,
-  link: LinkTool,
+  ColorPicker: {
+    class: ColorPicker as unknown as ToolConstructable,
+    config: {},
+  },
+  linkTool: {
+    class: LinkTool,
+    config: {
+      endpoint: `/api/blogs/url`,
+    },
+  },
   header: {
     class: Header,
     config: {

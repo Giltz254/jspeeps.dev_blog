@@ -2,23 +2,20 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormField from "./FormField";
-import { BsCodeSquare } from "react-icons/bs";
 import { MdMailOutline } from "react-icons/md";
 import ReusableButton from "./ReusableButton";
-import { useState, useTransition } from "react";
-import Alert from "./Alert";
+import { useTransition } from "react";
 import SocialAuth from "./SocialAuth";
 import {
   PasswordEmailSchema,
   PasswordEmailSchemaType,
 } from "@/schemas/ResetPasswordEmailSchema";
 import { passwordResetEmail } from "@/actions/auth/password-reset-email";
+import Logo from "./Logo";
+import { showErrorToast, showSuccessToast } from "../layout/Toasts";
 
 const PasswordResetForm = () => {
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
-
   const {
     register,
     handleSubmit,
@@ -30,31 +27,33 @@ const PasswordResetForm = () => {
   const handleSendOtp: SubmitHandler<PasswordEmailSchemaType> = async (
     data
   ) => {
-    setError("");
-    setSuccess("");
     startTransition(() => {
-      passwordResetEmail(data).then(res => {
+      passwordResetEmail(data).then((res) => {
         if (res.error) {
-          setError(res.error)
+          showErrorToast(res.error);
         }
         if (res.success) {
-          setSuccess(res.success)
+          showSuccessToast(res.success);
         }
-      })
+      });
     });
   };
 
   return (
     <div className="h-full pt-16 flex items-center justify-center">
-      <div className="w-full max-w-4xl flex flex-col md:flex-row md:border bg-white md:border-border md:rounded-md relative">
+      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white relative">
         <div className="w-full md:w-1/2 p-8">
-          <div className="flex px-4 justify-center gap-4 mb-6 h-12 border-b border-border items-center w-full">
-            <BsCodeSquare size={28} className="text-black" />
-            <span className="font-extrabold text-2xl">JSPEEPS.DEV</span>
+          <div className="flex px-4 justify-center gap-4 mb-6 h-12 items-center w-full">
+            <Logo />
           </div>
-          <h2 className="text-2xl font-semibold text-center text-black mb-6">
-            Recover Your Account
-          </h2>
+          <div className="flex flex-col mb-6">
+            <h2 className="text-2xl font-semibold text-center text-black">
+              Forgot Password
+            </h2>
+            <p className="text-sm text-center font-normal text-gray-700">
+              No worries, we'll send you reset instructions.
+            </p>
+          </div>
           <form className="space-y-6" onSubmit={handleSubmit(handleSendOtp)}>
             <div>
               <label
@@ -69,18 +68,13 @@ const PasswordResetForm = () => {
                 errors={errors}
                 placeholder="Enter your email"
                 disabled={isPending}
-                leftIcon={
-                  <MdMailOutline size={24} className="text-black" />
-                }
+                leftIcon={<MdMailOutline size={24} className="text-black" />}
               />
             </div>
-
-            {error && <Alert message={error} error />}
-            {success && <Alert message={success} success />}
             <ReusableButton
               type="submit"
               disabled={isPending}
-              label={isPending ? "Sending..." : "Send Password Reset Link"}
+              label={isPending ? "Sending..." : "Reset Password"}
               className="w-full cursor-pointer"
             />
           </form>

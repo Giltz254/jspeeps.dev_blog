@@ -16,8 +16,6 @@ export default function SearchPage() {
     if (!query.trim()) return;
     setLoading(true);
     setSearched(true);
-
-    // Simulate API call
     setTimeout(() => {
       setResults([
         { id: 1, title: 'Example Result 1', description: 'Description of result 1' },

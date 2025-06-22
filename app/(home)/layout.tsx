@@ -3,6 +3,7 @@ import Navbar from "@/components/custom/navbar/Navbar";
 import { cn } from "@/lib/utils";
 import { SessionProvider } from "next-auth/react";
 import React from "react";
+import { Toaster } from "sonner";
 
 const HomeLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
@@ -10,7 +11,10 @@ const HomeLayout = async ({ children }: { children: React.ReactNode }) => {
     <SessionProvider>
       <div className={cn("flex flex-col min-h-screen w-full")}>
         <Navbar session={session} />
-        <main>{children}</main>
+        <main>
+          {children}
+          <Toaster position="top-center" />
+        </main>
       </div>
     </SessionProvider>
   );

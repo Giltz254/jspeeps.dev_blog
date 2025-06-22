@@ -3,40 +3,42 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, LoginSchemaType } from "@/schemas/LoginSchema";
 import FormField from "./FormField";
-import { BsCodeSquare } from "react-icons/bs";
 import { MdMailOutline } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import ReusableButton from "./ReusableButton";
 import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { Login } from "@/actions/auth/login";
-import Alert from "./Alert";
 import { useRouter } from "next/navigation";
 import { LOGIN_REDIRECT } from "@/routes";
 import SocialAuth from "./SocialAuth";
 import { useSearchParams } from "next/navigation";
 import { verifyEmail } from "@/actions/auth/email-verification";
+import Logo from "./Logo";
+import { showErrorToast, showSuccessToast } from "../layout/Toasts";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider"
       : "";
+  if (urlError) {
+    showErrorToast(urlError);
+  }
   const callbackUrl = searchParams.get("callbackUrl");
   const token = searchParams.get("token") ?? undefined;
   useEffect(() => {
     if (token) {
       verifyEmail(token).then((res) => {
         if (res.success) {
-          setSuccess(res.success);
+          showSuccessToast(res.success);
           router.replace("/login");
-        } else {
-          setError(res.error);
+        }
+        if (res.error) {
+          showErrorToast(res.error);
         }
       });
     }
@@ -48,16 +50,13 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<LoginSchemaType>({ resolver: zodResolver(LoginSchema) });
   const handleSubmitForm: SubmitHandler<LoginSchemaType> = async (data) => {
-    setError("");
-    setSuccess("");
-
     startTransition(() => {
       (async () => {
         const res = await Login(data, callbackUrl);
         if (res?.error) {
-          setError(res.error);
+          showErrorToast(res.error);
         } else if (res?.requiresVerification) {
-          setSuccess(res.success);
+          showSuccessToast(res.success);
         } else {
           router.push(callbackUrl || LOGIN_REDIRECT);
         }
@@ -66,14 +65,13 @@ const LoginForm = () => {
   };
   return (
     <div className="h-full py-10 flex items-center justify-center">
-      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white md:border md:rounded-md relative">
+      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white relative">
         <div className="w-full md:w-1/2 p-8">
-          <div className="flex px-4 justify-center gap-4 mb-6 h-12 border-b border-border items-center w-full">
-            <BsCodeSquare size={28} className="text-black" />
-            <span className="font-extrabold text-2xl">JSPEEPS.DEV</span>
+          <div className="flex px-4 justify-center gap-4 mb-6 h-12 items-center w-full">
+            <Logo />
           </div>
           <h2 className="text-2xl font-semibold text-center text-black mb-6">
-            Log into your account?
+            Log into your account
           </h2>
           <form className="space-y-6" onSubmit={handleSubmit(handleSubmitForm)}>
             <div>
@@ -117,9 +115,6 @@ const LoginForm = () => {
                 </Link>
               </div>
             </div>
-            {error && <Alert message={error} error />}
-            {urlError && <Alert message={urlError} error />}
-            {success && <Alert message={success} success />}
             <ReusableButton
               type="submit"
               disabled={isPending}

@@ -19,13 +19,14 @@ export const generateSlug = (title: string) => {
   return title
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+    .replace(/[^a-z0-9\s-]/g, "") 
+    .replace(/\s+/g, "-") 
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
 };
 export const formatTimeFromNow = (date: Date) => {
   const fromNow = moment(new Date(date)).fromNow();
-  return fromNow.charAt(0).toUpperCase() + fromNow.slice(1);
+  return fromNow
 };
 export const formatDate = (date: string | Date): string => {
   return moment(date).format('MMM D, YYYY');
