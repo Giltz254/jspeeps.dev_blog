@@ -2,7 +2,6 @@
 
 import { BlogSchema, BlogSchemaType } from "@/schemas/BlogShema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import FormField from "../forms/FormField";
 import AddCover from "./AddCover";
@@ -13,7 +12,7 @@ import dynamic from "next/dynamic";
 import ReusableButton from "../forms/ReusableButton";
 import { createBlog } from "@/actions/blogs/create-blog";
 import { OutputBlockData } from "@editorjs/editorjs";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { getBlogByIdOrSlug } from "@/actions/blogs/get-blog-by-slug";
 import { getSummaryFromEditorJS } from "@/lib/ai";
 import SEOKeywordTitleGenerator from "./SeoKeywordTitleGenerator";
@@ -24,13 +23,15 @@ const Editorjs = dynamic(() => import("./editor/EditorJs"), {
 
 interface CreateBlogPostProps {
   availableTags: string[] | [];
+  userId: string | null;
 }
 
-const CreateBlogPost = ({ availableTags }: CreateBlogPostProps) => {
-  const session = useSession();
+const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
+  if (!userId) {
+    redirect(`/login`)
+  }
   const searchParams = useSearchParams();
   const id = searchParams.get("id") ?? undefined;
-  const userId = session.data?.user.id;
   const [uploadedCover, setUploadedCover] = useState<string>();
   const [editorContent, setEditorContent] = useState<
     OutputBlockData[] | undefined
@@ -95,7 +96,7 @@ const CreateBlogPost = ({ availableTags }: CreateBlogPostProps) => {
         return;
       }
       try {
-        const blogData = await getBlogByIdOrSlug({ id });
+        const blogData = await getBlogByIdOrSlug({ id, userId: userId ?? null });
         const blog = blogData.success?.blog;
         if (!blog) {
           showErrorToast("The document you're searching does not exist!");

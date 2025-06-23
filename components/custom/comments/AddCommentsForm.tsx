@@ -43,7 +43,7 @@ const AddCommentsForm = ({
     formState: { errors },
     reset,
     setValue,
-    getValues
+    getValues,
   } = useForm<CommentSchemaType>({
     resolver: zodResolver(CommentSchema),
   });
@@ -116,7 +116,7 @@ const AddCommentsForm = ({
   };
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)} className="relative">
-      <div className="relative border border-slate-300 bg-gradient-to-br from-slate-50 to-slate-100 rounded-full p-4 shadow-sm">
+      <div className="relative p-0 md:p-4 md:border md:border-slate-300 md:bg-gradient-to-br md:from-slate-50 md:to-slate-100 md:rounded-full md:shadow-sm">
         <TextAreaField<{ content: string }>
           id="content"
           register={register}
@@ -125,12 +125,12 @@ const AddCommentsForm = ({
           disabled={isPending || !userId}
           onKeyDown={handleKeyDown}
           placeholder={placeholder ?? "Add a comment..."}
-          inputClassNames="bg-white rounded-full resize-none pr-14 pl-4 py-3 text-sm text-slate-700 placeholder-slate-400 focus:ring-slate-400 focus:border-slate-400"
+          inputClassNames="w-full resize-none pe-12 pl-4 py-3 text-sm bg-white rounded-full border md:border-0 text-slate-700 placeholder-slate-400 focus:ring-slate-400 focus:border-slate-400"
         />
         <Button
           disabled={isPending || !userId}
           type="submit"
-          className="absolute cursor-pointer right-4 top-1/2 -translate-y-1/2 bg-slate-500 hover:bg-slate-600 text-white w-10 h-10 rounded-full shadow transition flex items-center justify-center"
+          className="absolute cursor-pointer top-1/2 -translate-y-1/2 right-0 md:right-4 bg-slate-500 hover:bg-slate-600 text-white w-10 h-10 rounded-full shadow transition flex items-center justify-center"
         >
           {isPending ? (
             <span className="text-sm">...</span>

@@ -4,25 +4,21 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 export default function CategoryNav({ tags }: { tags: string[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
   const pathname = usePathname();
-
   const currentTag = pathname.startsWith("/tags/")
-    ? decodeURIComponent(pathname.split("/tags/")[1])
-    : null;
-
+  ? decodeURIComponent(pathname.split("/tags/")[1].split("/")[0])
+  : null;
   const checkScroll = () => {
     const el = scrollRef.current;
     if (!el) return;
     setShowLeft(el.scrollLeft > 0);
     setShowRight(el.scrollWidth > el.clientWidth + el.scrollLeft);
   };
-
   const scroll = (direction: "left" | "right") => {
     const el = scrollRef.current;
     if (!el) return;
@@ -98,7 +94,7 @@ export default function CategoryNav({ tags }: { tags: string[] }) {
 
           return (
             <Link
-              href={`/tags/${formattedTag}`}
+              href={`/tags/${formattedTag}/1`}
               key={index}
               className="h-full flex items-center"
             >

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { formatTimeFromNow } from "@/lib/utils";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -19,19 +19,19 @@ const UserSummary = ({ name, image, createdAt }: UserSummaryProps) => {
   };
 
   return (
-    <div className="flex items-start justify-start gap-2">
-      <Avatar>
-        <AvatarImage src={image || getInitials(name)} />
-        <AvatarFallback>
-          {getInitials(name)}
-        </AvatarFallback>
+    <div className="flex items-start gap-3">
+      <Avatar className="w-8 h-8 mt-0.5">
+        <AvatarImage src={image || undefined} />
+        <AvatarFallback>{getInitials(name)}</AvatarFallback>
       </Avatar>
-      <span className="text-sm font-medium capitalize text-gray-700">
-        {name}
-      </span>
-      <span className="text-sm font-medium text-gray-700">
-        {formatTimeFromNow(createdAt)}
-      </span>
+      <div className="flex flex-col">
+        <span className="text-sm font-semibold capitalize text-gray-800 leading-tight">
+          {name}
+        </span>
+        <span className="text-xs text-gray-500">
+          {formatTimeFromNow(createdAt)}
+        </span>
+      </div>
     </div>
   );
 };

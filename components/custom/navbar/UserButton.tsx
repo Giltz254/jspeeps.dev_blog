@@ -79,9 +79,9 @@ const UserButton = ({ session }: SessionProps) => {
             {session.user.name}
           </DropdownMenuLabel>
         </div>
-        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick(`/user/${session.user.username}`)}>
+        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick(`/user/${session.user.username}/1`)}>
           <BiSolidUser size={24} />
-          <span className="font-normal text-base">Profile</span>
+          <span className="font-normal text-sm">Profile</span>
         </DropdownMenuItem>
         <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick("/blog/new")}>
           <svg
@@ -101,17 +101,17 @@ const UserButton = ({ session }: SessionProps) => {
               d="M14 4a.5.5 0 0 0 0-1zm7 6a.5.5 0 0 0-1 0zm-7-7H4v1h10zM3 4v16h1V4zm1 17h16v-1H4zm17-1V10h-1v10zm-1 1a1 1 0 0 0 1-1h-1zM3 20a1 1 0 0 0 1 1v-1zM4 3a1 1 0 0 0-1 1h1z"
             ></path>
           </svg>
-          <span className="font-normal text-base">Create Article</span>
+          <span className="font-normal text-sm">Create Article</span>
         </DropdownMenuItem>
 
         <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick("/bookmarks/1")}>
           <IoBookmarkSharp size={24} />
-          <span className="font-normal text-base">Bookmarked Articles</span>
+          <span className="font-normal text-sm">Bookmarked Articles</span>
         </DropdownMenuItem>
 
-        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick("/dashboard")}>
+        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick("/admin")}>
           <AiFillDashboard size={24} />
-          <span className="font-normal text-base">Dashboard</span>
+          <span className="font-normal text-sm">Dashboard</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

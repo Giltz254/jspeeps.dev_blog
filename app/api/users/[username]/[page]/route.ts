@@ -1,39 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { auth } from "@/auth";
-
+import { getUserId } from "@/lib/userId";
+import { NextRequest, NextResponse } from "next/server";
 export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ username: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ username: string; page: string }> }
 ) {
-  const { username } = await params;
-  const searchParams = req.nextUrl.searchParams;
-
-  const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = parseInt(searchParams.get("limit") || "10", 10);
-  const skip = (page - 1) * limit;
-
-  const session = await auth();
-  const userId = session?.user?.id;
-
+  const { username, page } = await params;
+  const pageNumber = parseInt(page || "1", 10);
+  const rawLimit = request.headers.get("x-limit");
+  const limit = parseInt(rawLimit || "10", 10);
+  const skip = (pageNumber - 1) * limit;
+  const userId = await getUserId();
   try {
     const user = await db.user.findUnique({
       where: { username },
       select: { id: true, name: true, image: true },
     });
-
     if (!user) {
       return NextResponse.json(
         { error: `User with username "${username}" not found.` },
         { status: 404 }
       );
     }
-
     const whereClause = {
       userId: user.id,
       isPublished: true,
     };
-
     const blogs = await db.blog.findMany({
       skip,
       take: limit,
@@ -65,11 +57,9 @@ export async function GET(
         },
       },
     });
-
     const totalBlogsCount = await db.blog.count({ where: whereClause });
-    const hasMore = totalBlogsCount > page * limit;
+    const hasMore = totalBlogsCount > pageNumber * limit;
     const totalPages = Math.ceil(totalBlogsCount / limit);
-
     return NextResponse.json({
       success: {
         blogs,

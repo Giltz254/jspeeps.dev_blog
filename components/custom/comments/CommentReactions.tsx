@@ -113,11 +113,11 @@ const CommentReactions = ({
   return (
     <div
       className={cn(
-        "flex justify-between items-center w-full text-sm mt-2 gap-4",
-        isReply && "justify-start ml-2"
+        "flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4 w-full text-sm mt-2",
+        isReply && "ml-2"
       )}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 flex-wrap">
         <button
           type="button"
           onClick={handleClap}
@@ -149,7 +149,7 @@ const CommentReactions = ({
           </span>
         )}
       </div>
-      <div className="flex flex-wrap items-center">
+      <div className="flex items-center gap-3 flex-wrap sm:justify-end">
         <span
           onClick={handleReply}
           className="flex items-center gap-1 cursor-pointer mr-4"

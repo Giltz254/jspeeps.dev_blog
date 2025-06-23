@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { Comment, User } from "@prisma/client";
+import { cache } from 'react'
 type CommentWithUser = Comment & {
   user: Pick<User, "id" | "name" | "image">;
   repliedToUser: Pick<User, "id" | "name"> | null;
@@ -26,7 +27,7 @@ type GetCommentsResponse =
       error: string;
     };
 
-export const getComments = async (
+export const getComments = cache(async (
   blogId: string,
   parentId: string | null,
   userId?: string,
@@ -80,4 +81,4 @@ export const getComments = async (
   } catch (error) {
     return { error: "Error fetching comments!" };
   }
-};
+});

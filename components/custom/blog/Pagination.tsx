@@ -13,9 +13,9 @@ const Pagination = ({
   username?: string;
 }) => {
   const getHref = (page: number) => {
-    if (tag) return `/tags/${tag}?page=${page}`
+    if (tag) return `/tags/${tag}/${page}`
     if (username) {
-      return `/user/${username}?page=${page}`
+      return `/user/${username}/${page}`
     }
     return `/blog/feed/${page}`
   }

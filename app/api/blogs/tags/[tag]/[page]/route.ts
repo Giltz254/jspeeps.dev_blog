@@ -1,18 +1,18 @@
 import { db } from "@/lib/db";
-import { getUserId } from "@/lib/userId";
 import { NextRequest, NextResponse } from "next/server";
-
+import { headers } from "next/headers";
 export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ tag: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ page: string; tag: string }> }
 ) {
-  const { tag } = await params;
-  const { searchParams } = new URL(req.url);
-  const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = parseInt(searchParams.get("limit") || "10", 10);
-  const skip = (page - 1) * limit;
-  const userId = await getUserId();
-  console.log("Second page>>>>>", page)
+  const { page, tag } = await params;
+  const headersList = await headers();
+  const pageNumber = parseInt(page || "1", 10);
+  const rawLimit = headersList.get("x-limit");
+  const limit = parseInt(rawLimit || "10", 10);
+  const skip = (pageNumber - 1) * limit;
+  const userId = headersList.get("x-user-id");
+
   try {
     const formattedTagForDB = tag.replace(/-/g, " ");
     const blogs = await db.blog.findMany({
@@ -59,9 +59,12 @@ export async function GET(
         },
       },
     });
-    const hasMore = totalBlogsCount > page * limit;
+    const hasMore = totalBlogsCount > pageNumber * limit;
     return NextResponse.json({ success: { blogs, hasMore } });
   } catch (error) {
-    return NextResponse.json({ error: "Error fetching blogs!" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error fetching blogs!" },
+      { status: 500 }
+    );
   }
 }

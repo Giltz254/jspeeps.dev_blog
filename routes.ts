@@ -7,7 +7,7 @@ export const publicRoutes: (string | RegExp)[] = [
   /^\/blog\/feed(?:\/.*)?$/,
   "/api/blogs",
   /^\/api\/blogs\/[^/]+$/,
-  /^\/api\/blogs\/tags\/[^/]+$/, 
+  /^\/api\/blogs\/tags\/[^/]+$/,
   /^\/tags\/[^/]+$/,
   "/api/comments",
   /^\/api\/edgestore(?:\/.*)?$/,
@@ -18,12 +18,24 @@ export const publicRoutes: (string | RegExp)[] = [
   "/jspeeps-terms-of-service",
   "/help.jspeeps",
   /^\/api\/blogs\/tags\/[^/]+$/,
-  /^\/user\/[^/]+$/,       
+  /^\/user\/[^/]+$/,
   /^\/api\/users\/[^/]+$/,
-  "/settings/profile"
+  "/settings/profile",
+  /^\/api\/users\/[^/]+\/[^/]+$/,
+  /^\/user\/[^/]+\/[^/]+$/,
+  /^\/api\/blogs\/feed\/[^/]+$/,
+  /^\/tags\/[^/]+\/[^/]+$/,
+/^\/api\/blogs\/tags\/[^/]+\/[^/]+$/,
+/^\/api\/blogs\/bookmarks\/\d+$/
 ];
 
-export const authRoutes = ["/login", "/register", "/forgot-password", "/new-password", "/auth-error"];
+export const authRoutes = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/new-password",
+  "/auth-error",
+];
 
 export const protectedRoutes: (string | RegExp)[] = [
   "/blog/new",

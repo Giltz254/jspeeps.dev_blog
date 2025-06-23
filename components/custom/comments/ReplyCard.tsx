@@ -1,4 +1,3 @@
-import { useState } from "react";
 import CommentReactions from "./CommentReactions";
 import { CommentWithUser } from "./ListComments";
 import AddCommentsForm from "./AddCommentsForm";
@@ -18,22 +17,23 @@ const ReplyCard = ({
   onReplyDeleted?: (id: string) => void;
   userId?: string;
 }) => {
-  const { activeReplyFormId, handleReplyCreated, setActiveReplyFormId } =
+  const { activeReplyFormId, setActiveReplyFormId } =
     useCommentsContext();
   const showForm = activeReplyFormId === reply.id;
+
   return (
-    <div className="p-4 pr-0 flex flex-col gap-2">
+    <div className="px-3 sm:px-4 pt-3 pb-4 flex flex-col gap-2">
       <UserSummary
         name={reply.user.name}
         image={reply.user.image}
         createdAt={reply.createdAt}
       />
-      <p>
+      <p className="text-slate-800 leading-relaxed text-sm sm:text-base">
         {reply.repliedToUser && (
-          <span className="bg-gradient-to-br from-slate-100 to-slate-200 text-slate-800 px-3 py-1 rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer">
+          <span className="bg-gradient-to-br from-slate-100 to-slate-200 text-slate-800 px-3 py-1 rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer mr-1">
             @{reply.repliedToUser.name}
           </span>
-        )}{" "}
+        )}
         {reply.content}
       </p>
       <CommentReactions
@@ -43,21 +43,19 @@ const ReplyCard = ({
         onReplyCreated={onReplyCreated}
         onReplyDeleted={onReplyDeleted}
       />
-      {showForm && (
-        <div className="border-l pl-2 my-2 ml-4">
-          {userId && showForm && (
-            <AddCommentsForm
-              blogId={reply.blogId}
-              userId={userId}
-              parentId={reply.parentId ? reply.parentId : undefined}
-              repliedToId={reply.userId}
-              placeholder="Add Reply"
-              onCommentAdded={onReplyCreated}
-              onReplyAdded={onReplyAdded}
-              isActive={showForm}
-              deactivate={() => setActiveReplyFormId(null)}
-            />
-          )}
+      {showForm && userId && (
+        <div className="border-l border-slate-300 pl-3 sm:pl-4 mt-2">
+          <AddCommentsForm
+            blogId={reply.blogId}
+            userId={userId}
+            parentId={reply.parentId ?? undefined}
+            repliedToId={reply.userId}
+            placeholder="Add Reply"
+            onCommentAdded={onReplyCreated}
+            onReplyAdded={onReplyAdded}
+            isActive={showForm}
+            deactivate={() => setActiveReplyFormId(null)}
+          />
         </div>
       )}
     </div>

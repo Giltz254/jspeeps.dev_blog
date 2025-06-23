@@ -1,21 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getUserId } from "@/lib/userId";
+import { headers } from 'next/headers'
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const searchParams = req.nextUrl.searchParams;
-  const id = searchParams.get("id");
-
-  const userId = await getUserId();
-
+  const headersList = await headers()
+  const id = headersList.get('x-blog-id')
+  const userId = headersList.get('x-user-id');
   if (!id && !slug) {
     return NextResponse.json({ error: "Missing ID or Slug!" }, { status: 400 });
   }
-
   try {
     const blog = await db.blog.findUnique({
       where: id ? { id } : { slug },

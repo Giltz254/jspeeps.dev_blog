@@ -28,7 +28,8 @@ export async function generateMetadata({
   params,
 }: BlogContentProps): Promise<Metadata> {
   const { slug } = await params;
-  const res = await getBlogByIdOrSlug({ slug });
+  const userId = await getUserId();
+  const res = await getBlogByIdOrSlug({ slug, userId });
 
   if (!res.success || !res.success.blog) {
     return {
@@ -70,8 +71,9 @@ export async function generateStaticParams() {
 }
 const page = async ({ params }: BlogContentProps) => {
   const { slug } = await params;
+  const userId = await getUserId();
   let readTime = "0 min read";
-  const res = await getBlogByIdOrSlug({ slug });
+  const res = await getBlogByIdOrSlug({ slug, userId });
   if (!res.success) {
     return (
       <div className="max-w-lg mx-auto px-4 sm:px-6 h-[calc(100vh-64px)] flex items-center justify-center w-full mt-10">
@@ -93,7 +95,6 @@ const page = async ({ params }: BlogContentProps) => {
     const blocks = blog.content as Block[];
     readTime = calculateReadTime(blocks);
   }
-  const userId = await getUserId();
   return (
     <main className="max-w-6xl mx-auto px-4 pt-10">
       <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl text-black">
@@ -129,7 +130,7 @@ const page = async ({ params }: BlogContentProps) => {
                 alt={blog.title}
                 fill
                 className="object-cover object-center"
-                priority={false}
+                priority={true}
                 sizes="(max-width: 1024px) 100vw, (min-width: 1024px) 60vw, 60vw"
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent px-6 py-4">
@@ -181,7 +182,7 @@ const page = async ({ params }: BlogContentProps) => {
           </Suspense>
         </div>
         <aside className="w-full lg:w-1/3 pb-6 pt-4 flex flex-col lg:sticky lg:h-[calc(100vh-64px)] lg:overflow-y-clip hover:lg:overflow-y-scroll lg:px-4 lg:top-16 gap-6 lg:transition-all lg:duration-500">
-          <div className="hidden lg:block">
+          <div className="">
             <Toc selector=".content" />
           </div>
         </aside>
