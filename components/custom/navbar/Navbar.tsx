@@ -20,12 +20,12 @@ const Navbar = ({ session }: SessionProps) => {
               Jspeeps
             </span>
           </Link>
-          <Search />
+          <Search isNavbar={true} />
         </div>
         <div className="flex items-center space-x-4">
-          <div className="sm:hidden">
+          <Link href={"/search/1"} className="sm:hidden">
             <FiSearch className="text-xl" />
-          </div>
+          </Link>
 
           <Link
             href={"/blog/new"}

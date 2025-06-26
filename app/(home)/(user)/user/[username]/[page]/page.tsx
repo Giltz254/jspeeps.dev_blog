@@ -1,4 +1,9 @@
+import { getUserFollowData } from "@/actions/follow/fetch-followers";
+import { followUser } from "@/actions/follow/follow";
+import { followers } from "@/actions/follow/follow-user";
+import Follow from "@/components/custom/blog/Follow";
 import ListBlog from "@/components/custom/blog/ListBlog";
+import Alert from "@/components/custom/forms/Alert";
 import NoPublicPosts from "@/components/custom/NoPublicPosts";
 import { getUserId } from "@/lib/userId";
 import Image from "next/image";
@@ -120,61 +125,73 @@ const Profile = async ({
   const displayName = userProfile?.name || username;
   const displayImage = userProfile?.image;
   const Id = userProfile?.id;
+  if (!Id) {
+    return <Alert error message="User not found" />;
+  }
   const userId = await getUserId();
+  const { followers, _count } = await getUserFollowData(Id, userId);
+  console.log("follows", _count);
+  // if (breakdown) {
+  //   return <Alert error message="User not found" />;
+  // }
+  const follow = await followUser({ followingId: Id });
   const firstLetter = displayName ? displayName.charAt(0).toUpperCase() : "";
   return (
     <div className="flex flex-col min-h-[calc(100vh-64px)] bg-white w-full">
       <div className="flex flex-col lg:flex-row max-w-7xl min-h-[calc(100vh-64px)] mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex-1 flex flex-col gap-4 pb-10 lg:border-r lg:border-border">
           <div className="flex flex-col w-full lg:pr-4">
-            <div className="w-full bg-white pt-10 overflow-hidden pb-8">
-              <div className="relative flex flex-col md:flex-row items-start">
-                <div className="flex flex-col">
+            <div className="w-full bg-white pt-10 pb-8 px-4 sm:px-8 overflow-hidden">
+              <div className="relative flex flex-col md:flex-row items-center md:items-start justify-between">
+                <div className="flex items-center gap-6">
                   {displayImage ? (
-                    <Image
-                      src={displayImage}
-                      alt={`${displayName}'s profile picture`}
-                      width={120}
-                      height={120}
-                      className="rounded-xl object-cover border-4 border-border h-auto w-auto"
-                    />
+                    <div className="w-24 h-24 relative border-2 border-gray-200 rounded-full overflow-hidden bg-gray-100">
+                      <Image
+                        src={displayImage}
+                        alt={`${displayName}'s profile picture`}
+                        fill
+                        priority={false}
+                        className="object-cover rounded-full"
+                      />
+                    </div>
                   ) : (
                     <div
-                      className="flex w-30 h-30 items-center border-4 border-border justify-center rounded-xl bg-gray-300 text-white font-bold text-5xl"
+                      className="flex items-center justify-center w-24 h-24 border-4 border-border rounded-full bg-gray-300 text-white font-bold text-4xl"
                       aria-label={`${displayName}'s initial avatar`}
                     >
                       {firstLetter}
                     </div>
                   )}
-                  {userId === Id ? (
-                    <Link
-                      href="/settings/profile"
-                      className="px-5 py-2.5 text-white text-sm font-medium rounded-sm shadow-sm transition duration-300 ease-in-out
-               bg-gradient-to-r from-slate-500 via-blue-500 to-blue-600
-               hover:from-slate-600 hover:via-blue-600 hover:to-blue-700
-               focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2 mt-4 flex items-center justify-center"
-                    >
-                      Settings
-                    </Link>
-                  ) : userId ? (
-                    <button
-                      className="px-5 py-2.5 text-white text-sm font-medium rounded-sm shadow-sm transition duration-300 ease-in-out
-               bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
-               hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600
-               focus:outline-none focus:ring-2 focus:ring-pink-200 focus:ring-offset-2 mt-4 flex items-center justify-center"
-                    >
-                      Follow
-                    </button>
-                  ) : null}
+                  <div>
+                    <h2 className="text-2xl font-semibold text-gray-800">
+                      {displayName}
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">@{username}</p>
+
+                    {userId === Id && (
+                      <Link
+                        href="/settings/profile"
+                        className="inline-block mt-4 px-5 py-2.5 text-white text-sm font-medium rounded shadow-sm transition duration-300
+              bg-gradient-to-r from-slate-500 via-blue-500 to-blue-600
+              hover:from-slate-600 hover:via-blue-600 hover:to-blue-700
+              focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2"
+                      >
+                        Settings
+                      </Link>
+                    )}
+                  </div>
                 </div>
-                <div className="mt-4 md:mt-0 md:ml-6 text-start md:text-left">
-                  <h2 className="text-2xl font-semibold text-gray-800">
-                    {displayName}
-                  </h2>
-                  <p className="text-sm text-gray-500 mt-1">@{username}</p>
+                <div className="mt-6 md:mt-0">
+                  <Follow
+                    id={Id}
+                    userId={userId}
+                    isFollowing={Boolean(follow)}
+                    followersCount={_count.followers ? _count.followers : 0}
+                  />
                 </div>
               </div>
             </div>
+
             <div className="w-full border border-border rounded-xl mt-8 py-4">
               <h3 className="text-xl font-semibold text-black border-b mb-4 px-4 pb-4">
                 Published articles

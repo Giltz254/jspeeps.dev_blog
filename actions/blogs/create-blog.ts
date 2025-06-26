@@ -11,7 +11,9 @@ export const createBlog = async (values: BlogSchemaType & { id?: string }) => {
 
   const user = await getUserById(userId);
   if (!user) return { error: "User does not exist!" };
-
+  const searchText = `${values.title || ""} ${values.description || ""} ${values.summary || ""}`
+    .toLowerCase()
+    .replace(/\s+/g, "");
   let slug = "";
   let existingBlog = null;
 
@@ -45,6 +47,7 @@ export const createBlog = async (values: BlogSchemaType & { id?: string }) => {
           tags: values.tags?.map((tag) => tag.toLowerCase()) || [],
           coverImage: values.coverImage,
           summary: values.summary,
+          searchText,
           user: {
             connect: { id: userId },
           },
@@ -85,6 +88,7 @@ export const createBlog = async (values: BlogSchemaType & { id?: string }) => {
         slug,
         summary: values.summary,
         content: values.content || " ",
+        searchText,
       },
     });
     revalidateTag("blogs");

@@ -91,6 +91,7 @@ model Blog {
   updatedAt     DateTime       @updatedAt
   coverImage    String?
   summary       String?
+  searchText    String
   content       Json
   tags          String[]
   slug          String         @unique
@@ -152,7 +153,6 @@ model Comment {
   createdAt       DateTime       @default(now())
   claps           CommentClap[]
   notification    Notification[]
-
   blog          Blog      @relation(fields: [blogId], references: [id], onDelete: Cascade)
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   parent        Comment?  @relation("OneLevelThread", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -194,9 +194,8 @@ model Follow {
   followerId  String   @db.ObjectId
   followingId String   @db.ObjectId
   createAt    DateTime @default(now())
-  follower    User     @relation("UserAsFollower", fields: [followerId], references: [id], onDelete: Cascade) // the one following
-  following   User     @relation("UserAsFollowed", fields: [followingId], references: [id], onDelete: Cascade) // the one followed
-
+  follower    User     @relation("UserAsFollower", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("UserAsFollowed", fields: [followingId], references: [id], onDelete: Cascade) 
   @@unique([followerId, followingId])
 }
 

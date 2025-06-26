@@ -25,8 +25,11 @@ export const publicRoutes: (string | RegExp)[] = [
   /^\/user\/[^/]+\/[^/]+$/,
   /^\/api\/blogs\/feed\/[^/]+$/,
   /^\/tags\/[^/]+\/[^/]+$/,
-/^\/api\/blogs\/tags\/[^/]+\/[^/]+$/,
-/^\/api\/blogs\/bookmarks\/\d+$/
+  /^\/api\/blogs\/tags\/[^/]+\/[^/]+$/,
+  /^\/api\/blogs\/bookmarks\/\d+$/,
+  "/api/blogs/follow",
+  /^\/search\/\d+$/, 
+  /^\/api\/search\/\d+$/,
 ];
 
 export const authRoutes = [

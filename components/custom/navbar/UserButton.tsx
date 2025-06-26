@@ -28,20 +28,12 @@ const UserButton = ({ session }: SessionProps) => {
     setOpen(false);
     router.push(href);
   };
-
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger className="cursor-pointer outline-0">
         <Avatar>
           <AvatarImage
-            src={
-              session.user.image ||
-              session.user.name
-                ?.split(" ")
-                .map((n) => n[0])
-                .join("")
-                .toUpperCase()
-            }
+            src={session.user.image || ""}
             alt={session.user.name as string}
           />
           <AvatarFallback>
@@ -53,18 +45,12 @@ const UserButton = ({ session }: SessionProps) => {
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className={cn("h-[calc(100vh-64px)] mt-3 border-t-0 min-w-xs")}>
-        <div className="flex items-center justify-center flex-col mt-4">
+
+      <DropdownMenuContent className="mt-2 mr-4 w-64 p-2 rounded-md border bg-white shadow-xl">
+        <div className="flex flex-col items-center gap-2 py-4 border-b">
           <Avatar className="size-16 border">
             <AvatarImage
-              src={
-                session.user.image ||
-                session.user.name
-                  ?.split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .toUpperCase()
-              }
+              src={session.user.image || ""}
               alt={session.user.name as string}
             />
             <AvatarFallback>
@@ -75,22 +61,28 @@ const UserButton = ({ session }: SessionProps) => {
                 .toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <DropdownMenuLabel className="font-medium uppercase text-base">
+          <DropdownMenuLabel className="text-sm font-medium uppercase text-center">
             {session.user.name}
           </DropdownMenuLabel>
         </div>
-        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick(`/user/${session.user.username}/1`)}>
-          <BiSolidUser size={24} />
-          <span className="font-normal text-sm">Profile</span>
+        <DropdownMenuItem
+          className="flex items-center gap-2 px-3 mt-4 py-2 rounded-md hover:bg-gray-100 transition cursor-pointer"
+          onClick={() => handleClick(`/user/${session.user.username}/1`)}
+        >
+          <BiSolidUser size={20} />
+          <span className="text-sm">Profile</span>
         </DropdownMenuItem>
-        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick("/blog/new")}>
+
+        <DropdownMenuItem
+          className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition cursor-pointer"
+          onClick={() => handleClick("/blog/new")}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             fill="none"
             viewBox="0 0 24 24"
-            aria-label="Write"
           >
             <path
               stroke="currentColor"
@@ -101,24 +93,33 @@ const UserButton = ({ session }: SessionProps) => {
               d="M14 4a.5.5 0 0 0 0-1zm7 6a.5.5 0 0 0-1 0zm-7-7H4v1h10zM3 4v16h1V4zm1 17h16v-1H4zm17-1V10h-1v10zm-1 1a1 1 0 0 0 1-1h-1zM3 20a1 1 0 0 0 1 1v-1zM4 3a1 1 0 0 0-1 1h1z"
             ></path>
           </svg>
-          <span className="font-normal text-sm">Create Article</span>
+          <span className="text-sm">Create Article</span>
         </DropdownMenuItem>
 
-        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick("/bookmarks/1")}>
-          <IoBookmarkSharp size={24} />
-          <span className="font-normal text-sm">Bookmarked Articles</span>
+        <DropdownMenuItem
+          className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition cursor-pointer"
+          onClick={() => handleClick("/bookmarks/1")}
+        >
+          <IoBookmarkSharp size={20} />
+          <span className="text-sm">Bookmarks</span>
         </DropdownMenuItem>
 
-        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => handleClick("/admin")}>
-          <AiFillDashboard size={24} />
-          <span className="font-normal text-sm">Dashboard</span>
+        <DropdownMenuItem
+          className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition cursor-pointer"
+          onClick={() => handleClick("/admin")}
+        >
+          <AiFillDashboard size={20} />
+          <span className="text-sm">Dashboard</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem className="w-full cursor-pointer" onClick={() => signOut()}>
-          <PiSignOutFill size={24} />
-          <span className="font-normal text-base">Sign Out</span>
+        <DropdownMenuItem
+          className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-red-50 text-red-600 transition cursor-pointer"
+          onClick={() => signOut()}
+        >
+          <PiSignOutFill size={20} />
+          <span className="text-sm font-medium">Sign Out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
