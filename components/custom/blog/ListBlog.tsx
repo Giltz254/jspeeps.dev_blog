@@ -6,7 +6,7 @@ export type BlogWithUser = {
   slug: string;
   description: string;
   coverImage?: string;
-  createdAt: string;
+  createdAt: Date;
   content: any[];
   user: {
     id: string;
