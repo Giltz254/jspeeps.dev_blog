@@ -18,7 +18,7 @@ const SocialAuth = () => {
     <div className="w-full md:w-1/2 p-8 flex flex-col justify-center space-y-4">
       <ReusableButton
         label="Sign in with google"
-        className="cursor-pointer"
+        className="cursor-pointer text-sm"
         leftIcon={<FcGoogle size={24} />}
         onClick={() => handleClick("google")}
       />

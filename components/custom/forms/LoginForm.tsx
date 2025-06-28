@@ -119,7 +119,7 @@ const LoginForm = () => {
               type="submit"
               disabled={isPending}
               label={isPending ? "signing in" : "Sign in"}
-              className="w-full cursor-pointer"
+              className="w-full cursor-pointer text-sm"
             />
           </form>
           <div className="text-base mt-6 flex items-center gap-2 font-medium">

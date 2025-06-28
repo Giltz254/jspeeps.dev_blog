@@ -4,19 +4,20 @@ import { getBlogByIdOrSlug } from "@/actions/blogs/get-blog-by-slug";
 import Alert from "@/components/custom/forms/Alert";
 import BlogContent from "@/components/custom/blog/BlogContent";
 import { Block, calculateReadTime } from "@/lib/utils";
-import Reactions from "@/components/custom/blog/Reactions";
 import { Metadata } from "next";
 import { getPublishedBlogsSlugs } from "@/actions/blogs/get-published-blogs-slug";
 import PostMeta from "@/components/custom/blog/PostMeta";
 import { getUserId } from "@/lib/userId";
 const Comments = dynamic(() => import("@/components/custom/comments/Comments"));
 const Toc = dynamic(() => import("@/components/custom/blog/TableOfContents"));
+const Reactions = dynamic(() => import("@/components/custom/blog/Reactions"));
 import { HiLightBulb } from "react-icons/hi";
 import CommentsLoader from "@/components/custom/comments/CommentsLoader";
 import dynamic from "next/dynamic";
-import ArticleCard, {
-  ArtcleCardProps,
-} from "@/components/custom/blog/ArtcleCard";
+import { ArtcleCardProps } from "@/components/custom/blog/ArtcleCard";
+const ArticleCard = dynamic(
+  () => import("@/components/custom/blog/ArtcleCard")
+);
 interface BlogContentProps {
   params: Promise<{ slug: string }>;
 }
@@ -58,8 +59,11 @@ export async function generateMetadata({
 }
 export async function generateStaticParams() {
   const result = await getPublishedBlogsSlugs();
-  if (result && typeof result === 'object' && 'error' in result) {
-    console.error("Error fetching published blog slugs for static params:", result.error);
+  if (result && typeof result === "object" && "error" in result) {
+    console.error(
+      "Error fetching published blog slugs for static params:",
+      result.error
+    );
     return [];
   }
   const slugsWithDate: BlogSlug[] = result as BlogSlug[];
@@ -110,17 +114,19 @@ const page = async ({ params }: BlogContentProps) => {
         />
       )}
 
-      <Reactions
-        isSingleBlogPage={true}
-        blogId={blog.id}
-        claps={blog._count.claps}
-        Clapped={!!blog.claps.length}
-        userId={userId}
-        author={blog.user.id}
-        bookmarked={!!blog.bookmarks.length}
-        comments={blog._count.comments}
-        slug={slug}
-      />
+      <Suspense fallback={<p>Loading reactions...</p>}>
+        <Reactions
+          isSingleBlogPage={true}
+          blogId={blog.id}
+          claps={blog._count.claps}
+          Clapped={!!blog.claps.length}
+          userId={userId}
+          author={blog.user.id}
+          bookmarked={!!blog.bookmarks.length}
+          comments={blog._count.comments}
+          slug={slug}
+        />
+      </Suspense>
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-64px)]">
         <div className="flex-1 lg:border-r lg:pr-4 pt-4 border-border">
           {blog.coverImage && (
@@ -189,18 +195,22 @@ const page = async ({ params }: BlogContentProps) => {
       </div>
       <div className="border-t border-t-border flex flex-col py-10">
         <div className="flex flex-col mt-4">
-          {relatedBlogs && relatedBlogs.length > 0 && (
-            <>
-              <h2 className="text-2xl font-semibold text-black mb-10">
-                Related Articles
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
-                {relatedBlogs.map((blog) => (
-                  <ArticleCard blog={blog} key={blog.id} />
-                ))}
-              </div>
-            </>
-          )}
+          <Suspense
+            fallback={<CommentsLoader text="Loading related articles..." />}
+          >
+            {relatedBlogs && relatedBlogs.length > 0 && (
+              <>
+                <h2 className="text-2xl font-semibold text-black mb-10">
+                  Related Articles
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+                  {relatedBlogs.map((blog) => (
+                    <ArticleCard blog={blog} key={blog.id} />
+                  ))}
+                </div>
+              </>
+            )}
+          </Suspense>
         </div>
       </div>
     </main>

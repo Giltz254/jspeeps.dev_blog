@@ -1,18 +1,28 @@
-import { Blog, User } from "@prisma/client";
 import BlogCard from "./BlogCard";
 import Pagination from "./Pagination";
-export type BlogWithUser = Blog & {
-  user: Pick<User, "id" | "name" | "image">;
+export type BlogWithUser = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  coverImage?: string;
+  createdAt: string;
+  content: any[];
+  user: {
+    id: string;
+    name: string;
+    image: string;
+  };
   _count: {
-    claps: number
-    comments: number
+    claps: number;
+    comments: number;
   };
   claps: {
-    id: string
+    id: string;
   }[];
   bookmarks: {
-    id: string
-  }[]
+    id: string;
+  }[];
 };
 interface BlogCardProps {
   blogs: BlogWithUser[];

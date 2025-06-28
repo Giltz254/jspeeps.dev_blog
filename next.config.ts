@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
       {
         source: '/',
         destination: '/blog/feed/1',
-        permanent: false,
+        permanent: true,
       },
     ]
   },
