@@ -13,16 +13,15 @@ const aj = arcjet({
     }),
     tokenBucket({
       mode: "LIVE",
-      refillRate: 5,
+      refillRate: 60,
       interval: 10,
-      capacity: 10,
+      capacity: 120,
     }),
   ],
 });
 
 export async function GET(request: NextRequest) {
   const decision = await aj.protect(request, { requested: 5 });
-  console.log("Arcjet decision", decision);
   if (decision.isDenied()) {
     if (decision.reason.isRateLimit()) {
       return NextResponse.json(

@@ -90,7 +90,6 @@ const BlogFeed = async ({ params }: BlogFeedProps) => {
               <SectionHeader
                 title="Featured articles"
                 icon={Sparkles}
-                className="font-[family-name:var(--font-lora)]"
               />
               {featuredBlogs.map((blog: BlogWithUser, index: number) => (
                 <Card
@@ -107,7 +106,6 @@ const BlogFeed = async ({ params }: BlogFeedProps) => {
               <SectionHeader
                 title="Top rated"
                 icon={Star}
-                className="font-[family-name:var(--font-lora)]"
               />
               {fanFavourites.map((blog: BlogWithUser, index: number) => (
                 <Card

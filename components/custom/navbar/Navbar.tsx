@@ -5,21 +5,32 @@ import Search from "./Search";
 import Notifications from "./Notifications";
 import UserButton from "./UserButton";
 import { SessionProps } from "@/types";
+import { Award } from "lucide-react";
 const Navbar = ({ session }: SessionProps) => {
   const isLoggedIn = !!session?.user;
   return (
-    <header className="w-full border-b border-gray-200 bg-white h-16 z-50 sticky top-0 left-0 font-[family-name:var(--font-eb-garamond)]">
+    <header className="w-full border-b border-gray-200 bg-white h-16 z-50 sticky top-0 left-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Link
             href="/blog/feed/1"
-            className="relative flex items-center justify-center h-16 w-16 hover:opacity-90 transition-opacity font-[family-name:var(--font-lora)]"
+            className="relative flex shadow-sm border-2 border-[#102E50] rounded-full items-center justify-center group h-16 w-16 hover:opacity-90 transition-opacity"
           >
-            <div className="absolute inset-0 m-auto w-12 h-12 rounded-full border-2 border-black" />
-            <span className="relative z-10 uppercase px-1 text-black mr-[-0.25rem] ml-[-0.25rem] font-semibold text-base select-none bg-white">
+            <div className="absolute inset-0 m-auto w-12 h-12 rounded-full border-[3px] border-gray-400" />
+
+            <span
+              className="relative z-10 uppercase px-1 py-[0.1rem] text-black font-bold text-base select-none bg-white rounded-md shadow-sm 
+               border-2 border-[#102E50] group-hover:border-blue-500 transition-colors duration-1000 ease-in-out"
+            >
               Jspeeps
             </span>
+
+            <Award
+              className="absolute -z-10 text-blue-900 transform bottom-[-0.1rem] left-1/2 -translate-x-1/2"
+              size={60}
+            />
           </Link>
+
           <Search isNavbar={true} />
         </div>
         <div className="flex items-center space-x-4">

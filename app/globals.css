@@ -303,7 +303,7 @@ input:-webkit-autofill:active {
   }
   .image-tool--caption {
     position: relative;
-}
+  }
 }
 @layer utilities {
   .custom-scrollbar {
@@ -323,5 +323,22 @@ input:-webkit-autofill:active {
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background-color: #9ca3af;
     border-radius: 0.5rem;
+  }
+  @keyframes borderColorCycle {
+    0% {
+      border-color: #102e50;
+    }
+    33% {
+      border-color: #1d4ed8;
+    }
+    66% {
+      border-color: #9333ea;
+    }
+    100% {
+      border-color: #102e50;
+    }
+  }
+  .animate-border-color {
+    animation: borderColorCycle 4s infinite ease-in-out;
   }
 }

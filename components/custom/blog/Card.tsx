@@ -10,7 +10,10 @@ interface cardProps {
 }
 const Card = ({ blog, index, total }: cardProps) => {
   return (
-    <Link href={`/blog/${blog.slug}`} className={`relative font-[family-name:var(--font-eb-garamond)] py-4`}>
+    <Link
+      href={`/blog/${blog.slug}`}
+      className={`relative group py-4`}
+    >
       <div
         className={`grid grid-cols-1 ${index === total - 1 ? "border-b-0" : "border-b border-b-border"} sm:grid-cols-2 py-4 lg:block gap-4 items-start`}
       >
@@ -47,14 +50,14 @@ const Card = ({ blog, index, total }: cardProps) => {
               <span>{blog.user.name}</span>
             </div>
           </div>
-          <h2 className="font-semibold text-black text-base">{blog.title}</h2>
+          <h2 className="font-semibold text-black text-base group-hover:underline transition duration-300">{blog.title}</h2>
           <p className="text-sm text-gray-800 line-clamp-3">
             {blog.description}
           </p>
           <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
             <span className="text-xs text-gray-500">
-                Published {formatTimeFromNow(blog.createdAt)}
-              </span>
+              Published {formatTimeFromNow(blog.createdAt)}
+            </span>
           </div>
         </div>
       </div>
