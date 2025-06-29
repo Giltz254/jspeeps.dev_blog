@@ -1,6 +1,5 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import Image from "next/image";
-import { getBlogByIdOrSlug } from "@/actions/blogs/get-blog-by-slug";
 import Alert from "@/components/custom/forms/Alert";
 import BlogContent from "@/components/custom/blog/BlogContent";
 import { Block, calculateReadTime } from "@/lib/utils";
@@ -14,7 +13,8 @@ const Reactions = dynamic(() => import("@/components/custom/blog/Reactions"));
 import { HiLightBulb } from "react-icons/hi";
 import CommentsLoader from "@/components/custom/comments/CommentsLoader";
 import dynamic from "next/dynamic";
-import { ArtcleCardProps } from "@/components/custom/blog/ArtcleCard";
+import { fetchAllBlogDataInParallel } from "@/actions/blogs/fetchBlogDataInParallel";
+import { fetchStaticBlogData } from "@/actions/blogs/fetchStaticBlogData";
 const ArticleCard = dynamic(
   () => import("@/components/custom/blog/ArtcleCard")
 );
@@ -29,17 +29,15 @@ export async function generateMetadata({
   params,
 }: BlogContentProps): Promise<Metadata> {
   const { slug } = await params;
-  const userId = await getUserId();
-  const res = await getBlogByIdOrSlug({ slug, userId });
-
-  if (!res.success || !res.success.blog) {
+  const res = await fetchStaticBlogData(slug);
+  if (!res?.blog) {
     return {
       title: "Blog Not Found",
       description: "The requested blog could not be found.",
     };
   }
 
-  const blog = res.success.blog;
+  const blog = res.blog;
 
   return {
     title: {
@@ -67,7 +65,6 @@ export async function generateStaticParams() {
     return [];
   }
   const slugsWithDate: BlogSlug[] = result as BlogSlug[];
-
   if (!slugsWithDate || slugsWithDate.length === 0) {
     return [];
   }
@@ -77,16 +74,8 @@ const page = async ({ params }: BlogContentProps) => {
   const { slug } = await params;
   const userId = await getUserId();
   let readTime = "0 min read";
-  const res = await getBlogByIdOrSlug({ slug, userId });
-  if (!res.success) {
-    return (
-      <div className="max-w-lg mx-auto px-4 sm:px-6 h-[calc(100vh-64px)] flex items-center justify-center w-full mt-10">
-        <Alert error message="Error fetching blogs!" showRedirectLink />
-      </div>
-    );
-  }
-  const { blog, relatedBlogs }: { relatedBlogs: ArtcleCardProps[]; blog: any } =
-    res.success;
+  const res = await fetchAllBlogDataInParallel(slug);
+  const {blog, dynamic,relatedBlogs} = res;
   if (!blog) {
     return (
       <div className="max-w-lg mx-auto px-4 sm:px-6 h-[calc(100vh-64px)] flex items-center justify-center w-full mt-10">
@@ -118,12 +107,12 @@ const page = async ({ params }: BlogContentProps) => {
         <Reactions
           isSingleBlogPage={true}
           blogId={blog.id}
-          claps={blog._count.claps}
-          Clapped={!!blog.claps.length}
+          claps={dynamic.clapsCount}
+          Clapped={dynamic.hasClapped}
           userId={userId}
           author={blog.user.id}
-          bookmarked={!!blog.bookmarks.length}
-          comments={blog._count.comments}
+          bookmarked={dynamic.hasBookmarked}
+          comments={dynamic.commentsCount}
           slug={slug}
         />
       </Suspense>

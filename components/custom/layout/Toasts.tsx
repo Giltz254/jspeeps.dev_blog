@@ -47,7 +47,7 @@ const InfoIcon = (
 export const showSuccessToast = (message: string) => {
   toast.success(message, {
     icon: (
-      <div className="flex items-center justify-center rounded-full bg-teal-600 p-1">
+      <div className="flex items-center justify-center rounded-full bg-emerald-600 p-1">
         {CheckmarkIcon}
       </div>
     ),
@@ -57,7 +57,7 @@ export const showSuccessToast = (message: string) => {
       backgroundColor: "#27272a",
       color: "#ffffff",
       borderRadius: "8px",
-      padding: "16px",
+      padding: "12px",
       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
       display: "flex",
       alignItems: "center",
@@ -73,13 +73,13 @@ export const showErrorToast = (message: string) => {
         {ErrorIcon}
       </div>
     ),
-    duration: 5000,
+    duration: 3000,
     closeButton: true,
     style: {
       backgroundColor: "#27272a",
       color: "#ffffff",
       borderRadius: "8px",
-      padding: "16px",
+      padding: "12px",
       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
       display: "flex",
       alignItems: "center",
@@ -95,13 +95,13 @@ export const showInfoToast = (message: string) => {
         {InfoIcon}
       </div>
     ),
-    duration: 4000,
+    duration: 3000,
     closeButton: true,
     style: {
       backgroundColor: "#27272a",
       color: "#ffffff",
       borderRadius: "8px",
-      padding: "16px",
+      padding: "12px",
       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
       display: "flex",
       alignItems: "center",

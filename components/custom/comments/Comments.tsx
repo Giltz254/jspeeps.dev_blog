@@ -14,9 +14,8 @@ interface CommentsProps {
   userId: string | undefined;
 }
 
-const LIMIT = 10;
-
 const Comments = ({ blogId, creatorId, userId }: CommentsProps) => {
+  const LIMIT = 10;
   const getKey = (
     pageIndex: number,
     previousPageData: { comments: CommentWithUser[]; hasMore: boolean } | null

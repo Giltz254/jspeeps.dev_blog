@@ -182,11 +182,10 @@ model Notification {
   content     String?
   isRead      Boolean          @default(false)
   createdAt   DateTime         @default(now())
-
   recipient User @relation("NotificationReceived", fields: [recipientId], references: [id], onDelete: Cascade)
   sender    User @relation("NotificationSent", fields: [senderId], references: [id], onDelete: Cascade)
   blog    Blog?    @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  comment Comment? @relation(fields: [commentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
 }
 
 model Follow {

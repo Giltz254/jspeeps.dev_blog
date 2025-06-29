@@ -7,7 +7,7 @@ import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";
 import TextAreaField from "./TextAreaField";
 import { addComment } from "@/actions/comments/add-comment";
 import { createNotification } from "@/actions/notifications/createNotification";
-import { useSocket } from "@/context/SocketContext";
+// import { useSocket } from "@/context/SocketContext";
 import { CommentWithUser } from "./ListComments";
 import { SendHorizonal } from "lucide-react";
 import { showErrorToast, showSuccessToast } from "../layout/Toasts";
@@ -42,8 +42,6 @@ const AddCommentsForm = ({
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
-    getValues,
   } = useForm<CommentSchemaType>({
     resolver: zodResolver(CommentSchema),
   });
@@ -63,7 +61,6 @@ const AddCommentsForm = ({
         repliedToUserId: repliedToId,
       }).then(async (res) => {
         if (res.error) return showErrorToast(res.error);
-
         if (res.success) {
           if (deactivate) deactivate();
           onReplyAdded?.(res.success.comment);
@@ -76,11 +73,8 @@ const AddCommentsForm = ({
               entityType: "COMMENT",
               content: data.content,
             });
-
-            // send notification realtime
-            // sendNotification(repliedToId);
+            // sendNotification(repliedToId, userId);
           }
-
           if (creatorId) {
             await createNotification({
               recipientId: creatorId,
@@ -89,11 +83,8 @@ const AddCommentsForm = ({
               entityType: "BLOG",
               content: data.content,
             });
-
-            // send notification realtime
-            // sendNotification(creatorId);
+            // sendNotification(creatorId, userId);
           }
-
           showSuccessToast(res.success.message);
           reset();
         }

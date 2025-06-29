@@ -13,7 +13,7 @@ import ReusableButton from "../forms/ReusableButton";
 import { createBlog } from "@/actions/blogs/create-blog";
 import { OutputBlockData } from "@editorjs/editorjs";
 import { redirect, useSearchParams } from "next/navigation";
-import { getBlogByIdOrSlug } from "@/actions/blogs/get-blog-by-slug";
+import { getBlogById } from "@/actions/blogs/get-blog-by-id";
 import { getSummaryFromEditorJS } from "@/lib/ai";
 import SEOKeywordTitleGenerator from "./SeoKeywordTitleGenerator";
 import { showErrorToast, showSuccessToast } from "../layout/Toasts";
@@ -28,7 +28,7 @@ interface CreateBlogPostProps {
 
 const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
   if (!userId) {
-    redirect(`/login`)
+    redirect(`/login`);
   }
   const searchParams = useSearchParams();
   const id = searchParams.get("id") ?? undefined;
@@ -96,8 +96,15 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
         return;
       }
       try {
-        const blogData = await getBlogByIdOrSlug({ id, userId: userId ?? null });
-        const blog = blogData.success?.blog;
+        let blog: any = [];
+        await getBlogById({ id }).then((res) => {
+          if (res.error) {
+            showErrorToast(res.error);
+          }
+          if (res.success) {
+            blog = res.success?.blog;
+          }
+        });
         if (!blog) {
           showErrorToast("The document you're searching does not exist!");
           setEditorContent([]);

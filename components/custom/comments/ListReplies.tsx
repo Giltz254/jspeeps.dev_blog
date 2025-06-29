@@ -94,7 +94,7 @@ const ListReplies = ({
           key={r.id}
           className="relative ml-2 sm:ml-3 pl-4 sm:pl-6 border-l-2 border-slate-300"
         >
-          <span className="absolute top-3 -left-[6px] sm:-left-[7px] w-3 h-3 bg-white border-l-2 border-b-2 border-sky-500 rotate-45" />
+          <span className="absolute top-3 -left-[6px] sm:-left-[7px] w-3 h-3 bg-white border-l-2 border-b-2 border-slate-300 rotate-45" />
 
           <ReplyCard
             userId={userId}

@@ -5,7 +5,6 @@ import { CommentWithUser } from "./ListComments";
 import { useEffect, useState } from "react";
 import { FaHandsClapping } from "react-icons/fa6";
 import { FaRegComment } from "react-icons/fa";
-import { BsReply } from "react-icons/bs";
 import { PiHandsClapping } from "react-icons/pi";
 import { clapComment } from "@/actions/comments/clap-comment";
 import { deleteComment } from "@/actions/comments/delete-comment";
@@ -16,6 +15,8 @@ import {
   showInfoToast,
   showSuccessToast,
 } from "../layout/Toasts";
+import CustomDropdown from "./CustomDropdown";
+import { BsReply } from "react-icons/bs";
 
 interface CommentReactionsProps {
   comment: CommentWithUser;
@@ -113,7 +114,7 @@ const CommentReactions = ({
   return (
     <div
       className={cn(
-        "flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4 w-full text-sm mt-2",
+        "flex flex-row justify-between gap-2 sm:gap-4 w-full text-sm mt-2",
         isReply && "ml-2"
       )}
     >
@@ -137,7 +138,7 @@ const CommentReactions = ({
             className="flex items-center whitespace-nowrap gap-1 cursor-pointer text-sm"
           >
             <FaRegComment size={18} />
-            <span className="bg-sky-100 text-sky-800 hover:bg-sky-200 transition duration-300 px-3 py-1 rounded-full flex items-center gap-1 font-medium shadow-sm border border-sky-200">
+            <span className="bg-sky-100 text-sky-800 hover:bg-sky-200 transition duration-300 px-3 py-1 rounded-full flex items-center gap-1 font-normal text-sm border border-sky-200">
               {replyCount} {replyCount === 1 ? "Reply" : "Replies"}
               <ChevronDown
                 size={16}
@@ -149,38 +150,14 @@ const CommentReactions = ({
           </span>
         )}
       </div>
-      <div className="flex items-center gap-3 flex-wrap sm:justify-end">
-        <span
-          onClick={handleReply}
-          className="flex items-center gap-1 cursor-pointer mr-4"
-        >
-          <BsReply size={20} />
-          Reply
-        </span>
-        {userId === comment.userId && (
-          <button
-            disabled={isDeleting}
-            onClick={handleDelete}
-            className="relative bg-transparent disabled:cursor-not-allowed border-none group cursor-pointer"
-          >
-            <svg
-              viewBox="0 0 15 17.5"
-              height="17.5"
-              width="15"
-              xmlns="http://www.w3.org/2000/svg"
-              className="transform scale-120 transition-transform duration-200 linear group-hover:scale-150"
-            >
-              <path
-                transform="translate(-2.5 -1.25)"
-                d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z"
-                id="Fill"
-                className="group-hover:fill-red-700"
-              ></path>
-            </svg>
-            <div className="absolute -top-[130%] left-1/2 -translate-x-1/2 w-fit h-fit bg-red-700 px-2 py-1 transition-all duration-200 linear delay-200 text-white capitalize rounded-md text-xs opacity-0 invisible group-hover:visible group-hover:opacity-100 group-hover:-top-[160%]">
-              delete
-            </div>
-          </button>
+      <div className="flex items-center gap-3 justify-end">
+        <BsReply onClick={handleReply} size={20} className="cursor-pointer" />
+        {userId && userId === comment.userId && (
+          <CustomDropdown
+            showDelete={userId === comment.userId}
+            onDelete={handleDelete}
+            isDeleting={isDeleting}
+          />
         )}
       </div>
     </div>

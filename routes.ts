@@ -30,6 +30,9 @@ export const publicRoutes: (string | RegExp)[] = [
   "/api/blogs/follow",
   /^\/search\/\d+$/, 
   /^\/api\/search\/\d+$/,
+  "/api/notifications",
+  /^\/api\/blogs\/[^/]+\/static$/,
+  /^\/api\/blogs\/[^/]+\/dynamic$/
 ];
 
 export const authRoutes = [

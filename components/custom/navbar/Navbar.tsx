@@ -6,10 +6,25 @@ import Notifications from "./Notifications";
 import UserButton from "./UserButton";
 import { SessionProps } from "@/types";
 import { Award } from "lucide-react";
-const Navbar = ({ session }: SessionProps) => {
+import { getNotificationCount } from "@/actions/notifications/notificationCount";
+const Navbar = async ({ session }: SessionProps) => {
   const isLoggedIn = !!session?.user;
+  let initialUnreadCount = 0;
+  let initialCountError: string | null = null;
+  if (isLoggedIn) {
+    const countResult = await getNotificationCount();
+    if (countResult.error) {
+      console.error(
+        "Server Navbar: Error fetching initial unread count:",
+        countResult.error
+      );
+      initialCountError = countResult.error;
+    } else if (countResult.count !== undefined) {
+      initialUnreadCount = countResult.count;
+    }
+  }
   return (
-    <header className="w-full border-b border-gray-200 bg-white h-16 z-50 sticky top-0 left-0">
+    <header className="w-full border-b border-border bg-white h-16 z-50 sticky top-0 left-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Link
@@ -62,7 +77,8 @@ const Navbar = ({ session }: SessionProps) => {
             <span className={cn("text-base font-normal")}>Write</span>
           </Link>
 
-          {isLoggedIn && <Notifications />}
+          {isLoggedIn && <Notifications initialUnreadCount={initialUnreadCount}
+              initialCountError={initialCountError} />}
           {isLoggedIn ? (
             <UserButton session={session} />
           ) : (

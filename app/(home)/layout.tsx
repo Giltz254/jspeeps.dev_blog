@@ -13,7 +13,7 @@ const HomeLayout = async ({ children }: { children: React.ReactNode }) => {
         <Navbar session={session} />
         <main>
           {children}
-          <Toaster position="top-center" />
+          <Toaster position="bottom-left" />
         </main>
       </div>
     </SessionProvider>

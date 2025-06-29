@@ -10,10 +10,6 @@ export type ArtcleCardProps = {
   description: string;
   coverImage?: string;
   createdAt: Date;
-  _count: {
-    claps: number;
-    comments: number;
-  };
   user: {
     name: string;
     image?: string;
@@ -70,14 +66,6 @@ export default function ArticleCard({ blog }: ArticleCardProp) {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <span>{formatDate(blog.createdAt)}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <FaHandsClapping size={14} className="text-gray-600" />
-              <span>{blog._count.claps}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <FaRegCommentDots size={14} />
-              <span>{blog._count.comments}</span>
             </div>
           </div>
           <div className="flex items-center gap-3">

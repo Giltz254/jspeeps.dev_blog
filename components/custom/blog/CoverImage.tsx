@@ -33,9 +33,10 @@ const CoverImage = ({
       <Image
         src={url}
         fill
+        priority
         alt="Cover image"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-        className="object-cover object-center transition-transform duration-200 group-hover:scale-105"
+        className="object-cover bg-gray-100 object-center transition-transform duration-200 group-hover:scale-105"
       />
       {isEditor && (
         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 flex items-center gap-2 bg-white/80 backdrop-blur-md p-2 rounded-md shadow-md">

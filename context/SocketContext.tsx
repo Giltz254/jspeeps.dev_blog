@@ -6,7 +6,7 @@ import { io, Socket } from 'socket.io-client'
 
 interface iSocketContext {
     refetchNotifications: boolean
-    sendNotification: (recipientId: string) => void
+    sendNotification: (recipientId: string, userId: string | undefined) => void
     handleRefetchNotifications: () => void
 }
 
@@ -19,8 +19,8 @@ export const SocketContextProvider = ({ children }: { children: React.ReactNode 
     const [isSocketConnected, setIsSocketConnected] = useState(false)
     const [refetchNotifications, setRefetchNotifications] = useState(true)
 
-    const sendNotification = useCallback((recipientId: string) => {
-        if (user && socket && isSocketConnected) {
+    const sendNotification = useCallback((recipientId: string, userId: string | undefined) => {
+        if (userId && socket && isSocketConnected) {
             socket.emit('onNotification', recipientId)
         }
     }, [user, socket, isSocketConnected])
