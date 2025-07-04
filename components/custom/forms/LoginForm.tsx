@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useEffect, useTransition } from "react";
 import { Login } from "@/actions/auth/login";
 import { useRouter } from "next/navigation";
+import { LOGIN_REDIRECT } from "@/routes";
 import SocialAuth from "./SocialAuth";
 import { useSearchParams } from "next/navigation";
 import { verifyEmail } from "@/actions/auth/email-verification";
@@ -56,6 +57,8 @@ const LoginForm = () => {
           showErrorToast(res.error);
         } else if (res?.requiresVerification) {
           showSuccessToast(res.success);
+        } else {
+          router.push(callbackUrl || LOGIN_REDIRECT);
         }
       })();
     });
