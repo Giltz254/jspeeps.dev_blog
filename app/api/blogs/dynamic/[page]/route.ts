@@ -9,13 +9,6 @@ export async function GET(
   try {
     const headersList = await headers();
     const userId = headersList.get("x-user-id");
-    console.log("Dynamic ID:", userId)
-    if (!userId) {
-      return NextResponse.json(
-        { error: "User ID is required in the request headers." },
-        { status: 400 }
-      );
-    }
     const { page } = await params;
     if (!page || isNaN(parseInt(page))) {
       return NextResponse.json(
@@ -36,11 +29,11 @@ export async function GET(
       select: {
         id: true,
         claps: {
-          where: { userId },
+          where: userId ? { userId } : undefined,
           select: { id: true },
         },
         bookmarks: {
-          where: { userId },
+          where: userId ? { userId } : undefined,
           select: { id: true },
         },
       },

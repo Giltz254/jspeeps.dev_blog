@@ -9,10 +9,7 @@ export async function GET(
   try {
     const { tag, page } = await params;
     if (!tag) {
-      return NextResponse.json(
-        { error: "Tag is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Tag is required." }, { status: 400 });
     }
     const pageNumber = parseInt(page || "1", 10);
     const limit = 10;
@@ -21,7 +18,11 @@ export async function GET(
     const headersList = await headers();
     const userId = headersList.get("x-user-id");
     if (!userId) {
-      return NextResponse.json({ success: { userInteractions: {} } });
+      return NextResponse.json({
+        success: {
+          userInteractions: { clappedByUser: false, bookmarkedByUser: false },
+        },
+      });
     }
 
     const blogs = await db.blog.findMany({
