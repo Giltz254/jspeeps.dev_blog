@@ -6,42 +6,14 @@ import ErrorBlock from "@/components/custom/ErrorBlock";
 import NoPublicPosts from "@/components/custom/NoPublicPosts";
 import { getUserId } from "@/lib/userId";
 import { Sparkles, Star } from "lucide-react";
-import { db } from "@/lib/db";
-
 export async function generateStaticParams() {
   const tags = await fetchTags();
-  if (!Array.isArray(tags)) {
-    console.error("Invalid tags format.");
-    return [];
-  }
-  const allParams: { tag: string; page: string }[] = [];
-  for (const rawTag of tags) {
-    const formattedTag = rawTag.replace(/\s+/g, "-");
-
-    try {
-      const totalCount = await db.blog.count({
-        where: {
-          isPublished: true,
-          tags: {
-            has: rawTag, 
-          },
-        },
-      });
-      const totalPages = Math.ceil(totalCount / 10); 
-      for (let i = 1; i <= totalPages; i++) {
-        allParams.push({
-          tag: formattedTag,
-          page: i.toString(),
-        });
-      }
-    } catch (error) {
-      console.error(`Failed to get total pages for tag: ${rawTag}`, error);
-    }
-  }
-  console.log("All params:", allParams)
-  return allParams;
+  if (!Array.isArray(tags)) return [];
+  return tags.map((rawTag) => ({
+    tag: rawTag.replace(/\s+/g, "-"),
+    page: "1",
+  }));
 }
-
 const tagPage = async ({
   params,
 }: {
