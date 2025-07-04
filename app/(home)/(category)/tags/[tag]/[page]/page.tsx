@@ -6,44 +6,42 @@ import ErrorBlock from "@/components/custom/ErrorBlock";
 import NoPublicPosts from "@/components/custom/NoPublicPosts";
 import { getUserId } from "@/lib/userId";
 import { Sparkles, Star } from "lucide-react";
+import { db } from "@/lib/db";
+
 export async function generateStaticParams() {
   const tags = await fetchTags();
   if (!Array.isArray(tags)) {
     console.error("Invalid tags format.");
     return [];
   }
-  const fetchTotalPagesForTag = async (rawTag: string) => {
+  const allParams: { tag: string; page: string }[] = [];
+  for (const rawTag of tags) {
     const formattedTag = rawTag.replace(/\s+/g, "-");
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/tags/total-pages/${formattedTag}`,
-        {
-          cache: "force-cache",
-          next: { tags: ["blogs"] },
-        }
-      );
-      if (!res.ok) {
-        console.warn(`Failed fetch for: ${formattedTag}`);
-        return [];
-      }
-      const data = await res.json();
-      const totalPages = data.success?.totalPages ?? 0;
 
-      return Array.from({ length: totalPages }, (_, i) => ({
-        tag: formattedTag,
-        page: (i + 1).toString(),
-      }));
-    } catch (err) {
-      console.error(`Error for ${formattedTag}`, err);
-      return [];
+    try {
+      const totalCount = await db.blog.count({
+        where: {
+          isPublished: true,
+          tags: {
+            has: rawTag, 
+          },
+        },
+      });
+      const totalPages = Math.ceil(totalCount / 10); 
+      for (let i = 1; i <= totalPages; i++) {
+        allParams.push({
+          tag: formattedTag,
+          page: i.toString(),
+        });
+      }
+    } catch (error) {
+      console.error(`Failed to get total pages for tag: ${rawTag}`, error);
     }
-  };
-  const results = await Promise.allSettled(tags.map(fetchTotalPagesForTag));
-  const allParams = results.flatMap((result) =>
-    result.status === "fulfilled" ? result.value : []
-  );
+  }
+  console.log("All params:", allParams)
   return allParams;
 }
+
 const tagPage = async ({
   params,
 }: {
