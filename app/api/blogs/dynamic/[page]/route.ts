@@ -9,6 +9,7 @@ export async function GET(
   try {
     const headersList = await headers();
     const userId = headersList.get("x-user-id");
+    console.log("Dynamic ID:", userId)
     if (!userId) {
       return NextResponse.json(
         { error: "User ID is required in the request headers." },
