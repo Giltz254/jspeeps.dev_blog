@@ -10,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 import { AiFillDashboard } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { IoBookmarkSharp } from "react-icons/io5";
@@ -21,9 +20,7 @@ import { signOut } from "next-auth/react";
 const UserButton = ({ session }: SessionProps) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-
   if (!session) return null;
-
   const handleClick = (href: string) => {
     setOpen(false);
     router.push(href);
@@ -95,7 +92,6 @@ const UserButton = ({ session }: SessionProps) => {
           </svg>
           <span className="text-sm">Create Article</span>
         </DropdownMenuItem>
-
         <DropdownMenuItem
           className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition cursor-pointer"
           onClick={() => handleClick("/bookmarks/1")}
@@ -103,17 +99,16 @@ const UserButton = ({ session }: SessionProps) => {
           <IoBookmarkSharp size={20} />
           <span className="text-sm">Bookmarks</span>
         </DropdownMenuItem>
-
-        <DropdownMenuItem
-          className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition cursor-pointer"
-          onClick={() => handleClick("/admin")}
-        >
-          <AiFillDashboard size={20} />
-          <span className="text-sm">Dashboard</span>
-        </DropdownMenuItem>
-
+        {session.user.role === "ADMIN" && (
+          <DropdownMenuItem
+            className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition cursor-pointer"
+            onClick={() => handleClick("/admin")}
+          >
+            <AiFillDashboard size={20} />
+            <span className="text-sm">Dashboard</span>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
-
         <DropdownMenuItem
           className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-red-50 text-red-600 transition cursor-pointer"
           onClick={() => signOut()}

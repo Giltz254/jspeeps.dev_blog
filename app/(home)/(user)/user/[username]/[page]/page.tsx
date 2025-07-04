@@ -64,6 +64,7 @@ const Profile = async ({
     : [{ followers: [], _count: { followers: 0 } }, null];
 
   const { followers, _count } = followersData;
+  console.log("Followers>>>", followers)
   const follow = followData;
   const firstLetter = displayName ? displayName.charAt(0).toUpperCase() : "";
 
