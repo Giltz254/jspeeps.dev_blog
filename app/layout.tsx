@@ -10,6 +10,15 @@ const lora = Lora({
 });
 export const metadata: Metadata = {
   metadataBase: new URL(`${process.env.NEXT_PUBLIC_BASE_URL}`),
+  alternates: {
+    canonical: "/",
+    languages: {
+      "en-US": "/en-US",
+    },
+  },
+  openGraph: {
+    images: "/og-image.png",
+  },
   title: {
     default: "Hub for JavaScript, Web Dev & Tech Trends",
     template: "%s - Jspeeps.Dev",
