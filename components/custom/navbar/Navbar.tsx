@@ -5,8 +5,8 @@ import Search from "./Search";
 import Notifications from "./Notifications";
 import UserButton from "./UserButton";
 import { SessionProps } from "@/types";
-import { Award } from "lucide-react";
 import { getNotificationCount } from "@/actions/notifications/notificationCount";
+import { Award } from "lucide-react";
 const Navbar = async ({ session }: SessionProps) => {
   const isLoggedIn = !!session?.user;
   let initialUnreadCount = 0;
@@ -35,17 +35,15 @@ const Navbar = async ({ session }: SessionProps) => {
 
             <span
               className="relative z-10 uppercase px-1 py-[0.1rem] text-black font-bold text-base select-none bg-white rounded-md shadow-sm 
-               border-2 border-[#102E50] group-hover:border-blue-500 transition-colors duration-1000 ease-in-out"
+                             border-2 border-[#102E50] group-hover:border-blue-500 transition-colors duration-1000 ease-in-out"
             >
               Jspeeps
             </span>
-
             <Award
               className="absolute -z-10 text-blue-900 transform bottom-[-0.1rem] left-1/2 -translate-x-1/2"
               size={60}
             />
           </Link>
-
           <Search isNavbar={true} />
         </div>
         <div className="flex items-center space-x-4">
@@ -77,20 +75,27 @@ const Navbar = async ({ session }: SessionProps) => {
             <span className={cn("text-base font-normal")}>Write</span>
           </Link>
 
-          {isLoggedIn && <Notifications initialUnreadCount={initialUnreadCount}
-              initialCountError={initialCountError} />}
+          {isLoggedIn && (
+            <Notifications
+              initialUnreadCount={initialUnreadCount}
+              initialCountError={initialCountError}
+            />
+          )}
           {isLoggedIn ? (
             <UserButton session={session} />
           ) : (
-            <Link
-              href="/login"
-              className="inline-block px-5 py-2.5 text-white text-sm font-medium rounded-md shadow-sm transition duration-300 ease-in-out
-             bg-gradient-to-r from-slate-500 via-blue-500 to-blue-600
-             hover:from-slate-600 hover:via-blue-600 hover:to-blue-700
-             focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2"
-            >
-              Get Started
-            </Link>
+            <div className="relative inline-block group">
+              <div className="absolute left-1 top-1 w-full h-full bg-black -z-10 transition-all duration-300 group-hover:left-0 group-hover:top-0" />
+              <Link
+                href="/login"
+                className="inline-block px-5 py-2.5 text-white text-sm font-medium shadow-sm transition duration-300 ease-in-out
+      bg-gradient-to-r from-slate-500 via-blue-500 to-blue-600
+      hover:from-slate-600 hover:via-blue-600 hover:to-blue-700
+      focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2"
+              >
+                Get Started
+              </Link>
+            </div>
           )}
         </div>
       </div>
