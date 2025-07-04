@@ -13,14 +13,25 @@ const Reactions = dynamic(() => import("@/components/custom/blog/Reactions"));
 import { HiLightBulb } from "react-icons/hi";
 import CommentsLoader from "@/components/custom/comments/CommentsLoader";
 import dynamic from "next/dynamic";
-import { fetchAllBlogDataInParallel } from "@/actions/blogs/fetchBlogDataInParallel";
-import { fetchStaticBlogData } from "@/actions/blogs/fetchStaticBlogData";
 const ArticleCard = dynamic(
   () => import("@/components/custom/blog/ArtcleCard")
 );
 interface BlogContentProps {
   params: Promise<{ slug: string }>;
 }
+export type BlogPreview = {
+  id: string;
+  slug: string;
+  title: string;
+  coverImage: string;
+  description: string;
+  createdAt: Date;
+  user: {
+    name: string;
+    image: string;
+  };
+};
+
 type BlogSlug = {
   slug: string;
   updatedAt: Date;
@@ -29,16 +40,23 @@ export async function generateMetadata({
   params,
 }: BlogContentProps): Promise<Metadata> {
   const { slug } = await params;
-  const res = await fetchStaticBlogData(slug);
-  if (!res?.blog) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/${slug}/static`,
+    {
+      cache: "force-cache",
+      next: {
+        tags: ["blogs"],
+      },
+    }
+  );
+  const data = await res.json();
+  if (!data || !data.blog) {
     return {
       title: "Blog Not Found",
       description: "The requested blog could not be found.",
     };
   }
-
-  const blog = res.blog;
-
+  const blog = data.blog;
   return {
     title: {
       absolute: blog.title ?? "Untitled Blog",
@@ -74,8 +92,23 @@ const page = async ({ params }: BlogContentProps) => {
   const { slug } = await params;
   const userId = await getUserId();
   let readTime = "0 min read";
-  const res = await fetchAllBlogDataInParallel(slug);
-  const {blog, dynamic,relatedBlogs} = res;
+  const [staticData, dynamicData] = await Promise.all([
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/${slug}/static`, {
+      cache: "force-cache",
+      next: {
+        tags: ["blogs"],
+      },
+    }).then((res) => res.json()),
+
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/${slug}/dynamic`, {
+      headers: { "x-user-id": userId ?? "" },
+      cache: "no-store",
+      next: {
+        tags: ["blogs"],
+      },
+    }).then((res) => res.json()),
+  ]);
+  const { blog, relatedBlogs } = staticData;
   if (!blog) {
     return (
       <div className="max-w-lg mx-auto px-4 sm:px-6 h-[calc(100vh-64px)] flex items-center justify-center w-full mt-10">
@@ -107,12 +140,12 @@ const page = async ({ params }: BlogContentProps) => {
         <Reactions
           isSingleBlogPage={true}
           blogId={blog.id}
-          claps={dynamic.clapsCount}
-          Clapped={dynamic.hasClapped}
+          claps={dynamicData.clapsCount}
+          Clapped={dynamicData.hasClapped}
           userId={userId}
           author={blog.user.id}
-          bookmarked={dynamic.hasBookmarked}
-          comments={dynamic.commentsCount}
+          bookmarked={dynamicData.hasBookmarked}
+          comments={dynamicData.commentsCount}
           slug={slug}
         />
       </Suspense>
@@ -193,7 +226,7 @@ const page = async ({ params }: BlogContentProps) => {
                   Related Articles
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
-                  {relatedBlogs.map((blog) => (
+                  {relatedBlogs.map((blog: BlogPreview) => (
                     <ArticleCard blog={blog} key={blog.id} />
                   ))}
                 </div>

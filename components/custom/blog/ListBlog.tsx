@@ -7,7 +7,9 @@ export type BlogWithUser = {
   description: string;
   coverImage?: string;
   createdAt: Date;
-  content: any[];
+  bookmarkedByUser: boolean;
+  clappedByUser: boolean;
+  readtime?: string;
   user: {
     id: string;
     name: string;
@@ -31,6 +33,7 @@ interface BlogCardProps {
   isUserProfile?: boolean;
   tag?: string
   username?: string
+  isBookmark?: boolean
 }
 const ListBlog = ({
   blogs,
@@ -38,16 +41,17 @@ const ListBlog = ({
   currentPage,
   isUserProfile,
   tag,
-  username
+  username,
+  isBookmark
 }: BlogCardProps) => {
   return (
     <div className="flex flex-col min-h-[calc(100vh-64px)]">
       <section className="">
-        {blogs.map((blog) => (
-          <BlogCard key={blog.id} blog={blog} isUserProfile={isUserProfile} />
+        {blogs.map((blog, index) => (
+          <BlogCard key={blog.id} index={index} blog={blog} isUserProfile={isUserProfile} />
         ))}
       </section>
-      <Pagination tag={tag} hasMore={hasMore} currentPage={currentPage} username={username} />
+      <Pagination isBookMark={isBookmark} tag={tag} hasMore={hasMore} currentPage={currentPage} username={username} />
     </div>
   );
 };

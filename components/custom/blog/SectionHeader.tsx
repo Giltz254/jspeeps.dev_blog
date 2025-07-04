@@ -7,18 +7,22 @@ interface SectionHeaderProps {
   className?: string;
 }
 
-const SectionHeader: React.FC<SectionHeaderProps> = ({ title, icon: Icon, className = "" }) => {
+const SectionHeader: React.FC<SectionHeaderProps> = ({
+  title,
+  icon: Icon,
+  className = "",
+}) => {
   return (
-    <div className={cn("flex items-center gap-2 lg:pl-4 mb-2", className)}>
+    <div
+      className={cn("flex items-center gap-2 mb-2 border-b", className)}
+    >
       {Icon && <Icon className="text-orange-500 w-5 h-5" />}
-      <div className="relative">
-        <h2 className="text-lg font-medium first-letter:capitalize text-gray-900 leading-tight">
+
+      <div className="relative inline-block">
+        <h2 className="text-lg font-semibold first-letter:capitalize text-gray-900 leading-tight pb-2">
           {title}
         </h2>
-        <span
-          className="absolute bottom-0 left-0 w-full h-[3px] bg-orange-500 transform translate-y-px"
-          aria-hidden="true"
-        ></span>
+        <span className="absolute bottom-0 left-0 h-[2px] w-full bg-orange-500 rounded-full"></span>
       </div>
     </div>
   );

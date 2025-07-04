@@ -16,7 +16,7 @@ function useDebounce<T>(value: T, delay: number): T {
   useEffect(() => {
     const handler = setTimeout(() => setDebouncedValue(value), delay);
     return () => clearTimeout(handler);
-  }, [value, delay]); 
+  }, [value, delay]);
   return debouncedValue;
 }
 const Search = ({ isNavbar }: { isNavbar?: boolean }) => {
@@ -74,7 +74,7 @@ const Search = ({ isNavbar }: { isNavbar?: boolean }) => {
       };
       fetchSuggestions();
     } else if (!trimmedInput) {
-      setResults([]); 
+      setResults([]);
     }
   }, [debouncedInputValue, isSearchPage]);
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -84,9 +84,9 @@ const Search = ({ isNavbar }: { isNavbar?: boolean }) => {
   };
   const handleFocus = async () => {
     if (!isSearchPage) {
-      setDropdownOpen(true); 
+      setDropdownOpen(true);
       if (!inputValue.trim()) {
-        setResults([]); 
+        setResults([]);
         setLoading(false);
       } else {
         setLoading(true);
@@ -112,17 +112,12 @@ const Search = ({ isNavbar }: { isNavbar?: boolean }) => {
   const handleSearch = () => {
     const trimmedValue = inputValue.trim();
     setSearchQuery(trimmedValue);
-    updateQueryParam(trimmedValue);
-    if (!isSearchPage && trimmedValue) {
-      const params = new URLSearchParams();
-      params.set("query", trimmedValue);
-      setInputValue(""); 
-      router.push(`/search/1?${params.toString()}`);
-    } else {
-      setDropdownOpen(false);
-    }
-    setDropdownOpen(false); 
+    setDropdownOpen(false);
     inputRef.current?.blur();
+    if (!trimmedValue) return;
+    const params = new URLSearchParams();
+    params.set("query", trimmedValue);
+    router.push(`/search/1?${params.toString()}`);
   };
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === "Enter") {
@@ -133,7 +128,7 @@ const Search = ({ isNavbar }: { isNavbar?: boolean }) => {
     setDropdownOpen(false);
     router.push(`/blog/${slug}`);
   };
-   useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
         containerRef.current &&
@@ -197,45 +192,41 @@ const Search = ({ isNavbar }: { isNavbar?: boolean }) => {
               <div className="flex items-center justify-center w-full p-4">
                 <div className="w-10 h-10 border-4 border-t-blue-500 border-gray-300 rounded-full animate-spin"></div>
               </div>
-            ) : (
-              !isSearchPage && dropdownOpen && !inputValue.trim() ? (
-                <div className="p-4 text-sm text-gray-400">
-                  Type a search term to find articles
-                </div>
-              ) : (
-                results.length > 0 ? (
-                  results.map((blog) => (
-                    <div
-                      key={blog.id}
-                      className="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 transition cursor-pointer border-b last:border-none"
-                      onClick={() => handleSuggestionClick(blog.slug)}
-                    >
-                      <div className="w-14 relative h-14 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
-                        <Image
-                          src={blog.coverImage || "/default-thumbnail.jpg"}
-                          alt={blog.title}
-                          fill
-                          priority={false}
-                          sizes="56px"
-                          className="object-cover h-auto w-auto"
-                        />
-                      </div>
-                      <div className="flex flex-col overflow-hidden">
-                        <h3 className="text-sm font-medium text-gray-800 truncate">
-                          {blog.title}
-                        </h3>
-                        <p className="text-xs text-gray-500 truncate">
-                          {blog.description || "No description available."}
-                        </p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="p-4 text-sm text-gray-400">
-                    No suggestions found
+            ) : !isSearchPage && dropdownOpen && !inputValue.trim() ? (
+              <div className="p-4 text-sm text-gray-400">
+                Type a search term to find articles
+              </div>
+            ) : results.length > 0 ? (
+              results.map((blog) => (
+                <div
+                  key={blog.id}
+                  className="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 transition cursor-pointer border-b last:border-none"
+                  onClick={() => handleSuggestionClick(blog.slug)}
+                >
+                  <div className="w-14 relative h-14 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                    <Image
+                      src={blog.coverImage || "/default-thumbnail.jpg"}
+                      alt={blog.title}
+                      fill
+                      priority={false}
+                      sizes="56px"
+                      className="object-cover h-auto w-auto"
+                    />
                   </div>
-                )
-              )
+                  <div className="flex flex-col overflow-hidden">
+                    <h3 className="text-sm font-medium text-gray-800 truncate">
+                      {blog.title}
+                    </h3>
+                    <p className="text-xs text-gray-500 truncate">
+                      {blog.description || "No description available."}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="p-4 text-sm text-gray-400">
+                No suggestions found
+              </div>
             )}
           </div>
         </div>

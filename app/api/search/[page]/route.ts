@@ -19,8 +19,8 @@ const aj = arcjet({
     }),
   ],
 });
-
-export async function GET(request: NextRequest) {
+type Params = Promise<{ page: string }>
+export async function GET(request: NextRequest, { params }: {params: Params}) {
   const decision = await aj.protect(request, { requested: 5 });
   if (decision.isDenied()) {
     if (decision.reason.isRateLimit()) {
@@ -44,9 +44,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const rawQuery = searchParams.get("query")?.trim() || "";
     const query = rawQuery.toLowerCase().replace(/\s+/g, "");
-    const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1);
+    const { page } = await params;
+    const pageNumber = parseInt(page || "1", 10);
     const limit = Math.min(parseInt(searchParams.get("limit") || "10", 10), 50);
-    const skip = (page - 1) * limit;
+    const skip = (pageNumber - 1) * limit;
     if (!query) {
       return NextResponse.json({
         success: {
@@ -100,9 +101,7 @@ export async function GET(request: NextRequest) {
       }),
       db.blog.count({ where: whereClause }),
     ]);
-
-    const hasMore = totalCount > page * limit;
-
+    const hasMore = totalCount > pageNumber * limit;
     return NextResponse.json({
       success: {
         blogs,

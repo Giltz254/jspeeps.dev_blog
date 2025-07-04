@@ -32,48 +32,50 @@ export async function GET(
         isPublished: true,
       },
     });
+
     if (!blog) {
       return NextResponse.json({ error: "Blog not found!" }, { status: 404 });
     }
-    let relatedBlogs: any[] = [];
-    const currentBlogTags = blog.tags;
-    if (currentBlogTags && currentBlogTags.length > 0) {
-      relatedBlogs = await db.blog.findMany({
-        where: {
-          tags: {
-            hasSome: currentBlogTags,
-          },
-          id: {
-            not: blog.id,
-          },
-          isPublished: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 6,
-        select: {
-          id: true,
-          slug: true,
-          title: true,
-          coverImage: true,
-          description: true,
-          createdAt: true,
-          user: {
-            select: {
-              name: true,
-              image: true,
+    const relatedBlogsPromise =
+      blog.tags && blog.tags.length > 0
+        ? db.blog.findMany({
+            where: {
+              tags: {
+                hasSome: blog.tags,
+              },
+              id: {
+                not: blog.id,
+              },
+              isPublished: true,
             },
-          },
-        },
-      });
-    }
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 6,
+            select: {
+              id: true,
+              slug: true,
+              title: true,
+              coverImage: true,
+              description: true,
+              createdAt: true,
+              user: {
+                select: {
+                  name: true,
+                  image: true,
+                },
+              },
+            },
+          })
+        : Promise.resolve([]);
+
+    const [relatedBlogs] = await Promise.all([relatedBlogsPromise]);
 
     return NextResponse.json({ blog, relatedBlogs });
   } catch (error) {
     console.error("Error fetching static blog data:", error);
     return NextResponse.json(
-      { error: "Something went wrong!"},
+      { error: "Something went wrong!" },
       { status: 500 }
     );
   }

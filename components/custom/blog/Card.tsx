@@ -48,17 +48,15 @@ const Card = ({ blog, index, total }: cardProps) => {
 
             <div className="text-sm flex flex-col text-gray-700">
               <span>{blog.user.name}</span>
+              <span className="text-sm text-gray-600">
+              Published on {formatDate(blog.createdAt)}
+            </span>
             </div>
           </div>
-          <h2 className="font-semibold text-black text-base group-hover:underline transition duration-300">{blog.title}</h2>
-          <p className="text-sm text-gray-800 line-clamp-3">
+          <h2 className="font-semibold text-black text-lg group-hover:underline transition duration-300">{blog.title}</h2>
+          <p className="text-base text-gray-900 line-clamp-3">
             {blog.description}
           </p>
-          <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
-            <span className="text-xs text-gray-500">
-              Published {formatTimeFromNow(blog.createdAt)}
-            </span>
-          </div>
         </div>
       </div>
       <div className="absolute left-1/2 top-1/2 lg:block hidden transform -translate-x-1/2 -translate-y-1/2 text-gray-300 text-8xl opacity-10 pointer-events-none">

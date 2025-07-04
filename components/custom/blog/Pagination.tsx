@@ -5,17 +5,27 @@ const Pagination = ({
   currentPage,
   hasMore,
   tag,
-  username
+  username,
+  query,
+  isBookMark
 }: {
   currentPage: number
   hasMore: boolean
   tag?: string
   username?: string;
+  query?: string;
+  isBookMark?: boolean
 }) => {
   const getHref = (page: number) => {
     if (tag) return `/tags/${tag}/${page}`
     if (username) {
       return `/user/${username}/${page}`
+    }
+    if (query) {
+      return `/search/${page}?query=${query}`
+    }
+    if (isBookMark) {
+      return `/bookmarks/${page}`
     }
     return `/blog/feed/${page}`
   }

@@ -72,3 +72,21 @@ export interface FetchNotificationsResponse {
   error?: string;
   unreadCount: number;
 }
+export type BlogSummary = {
+  id: string;
+  slug: string;
+  title: string;
+  coverImage?: string;
+  readtime: number;
+  createdAt: Date;
+  description: string;
+  user: {
+    name: string;
+    id: string,
+    image?: string;
+  }
+  _count: {
+    claps: number;
+    comments: number;
+  };
+};

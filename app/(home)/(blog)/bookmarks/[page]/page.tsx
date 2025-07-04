@@ -5,7 +5,7 @@ import { Metadata } from "next";
 async function getBookmarks({
   page = 1,
   limit = 10,
-  userId
+  userId,
 }: {
   page: number;
   limit: number;
@@ -21,7 +21,7 @@ async function getBookmarks({
           ...(userId ? { "x-user-id": userId } : {}),
           "Content-Type": "application/json",
         },
-        cache: "force-cache",
+        cache: "no-store",
         next: {
           tags: ["blogs"],
         },
@@ -57,12 +57,12 @@ export const metadata: Metadata = {
 const Bookmarks = async ({ params }: BlogFeedProps) => {
   const { page } = await params;
   const limit: number = 10;
-  const userId = await getUserId()
+  const userId = await getUserId();
   const currentPage = parseInt(page, 10) || 1;
   const { success, error } = await getBookmarks({
     page: currentPage,
     limit,
-    userId
+    userId,
   });
   if (error) {
     return <Alert error message="Error fetching blogs" />;
@@ -80,10 +80,14 @@ const Bookmarks = async ({ params }: BlogFeedProps) => {
               Your Library
             </h1>
           </div>
-
-          <ListBlog blogs={blogs} hasMore={hasMore} currentPage={currentPage} />
+          <ListBlog
+            isBookmark={true}
+            blogs={blogs}
+            hasMore={hasMore}
+            currentPage={currentPage}
+          />
         </div>
-        <div className="w-1/3"></div>
+        <div className="w-full lg:w-1/3"></div>
       </div>
     </div>
   );

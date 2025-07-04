@@ -1,8 +1,7 @@
-import { FaRegCommentDots, FaRegBookmark } from "react-icons/fa";
+import { FaRegBookmark } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import formatDate from "@/lib/utils";
-import { FaHandsClapping } from "react-icons/fa6";
 export type ArtcleCardProps = {
   id: string;
   slug: string;
@@ -22,7 +21,7 @@ export default function ArticleCard({ blog }: ArticleCardProp) {
   return (
     <Link
       href={`/blog/${blog.slug}`}
-      className="bg-white overflow-hidden group"
+      className="bg-white overflow-hidden group flex flex-col h-full border"
     >
       {blog.coverImage && (
         <div className="w-full h-48 relative">
@@ -36,7 +35,8 @@ export default function ArticleCard({ blog }: ArticleCardProp) {
           />
         </div>
       )}
-      <div className="p-4 space-y-2">
+
+      <div className="p-4 flex flex-col flex-1">
         <div className="text-sm text-gray-500 flex items-center gap-1">
           <div className="h-6 w-6 flex items-center justify-center rounded-full">
             {blog.user.image ? (
@@ -58,11 +58,12 @@ export default function ArticleCard({ blog }: ArticleCardProp) {
           <span className="text-gray-400">by</span>
           <span className="text-gray-700 font-normal">{blog.user.name}</span>
         </div>
-        <h2 className="text-lg block font-bold text-gray-900 leading-snug group-hover:underline">
+        <h2 className="text-lg block font-bold text-gray-900 leading-snug group-hover:underline mt-2">
           {blog.title}
         </h2>
-        <p className="text-sm text-gray-600">{blog.description}</p>
-        <div className="flex items-center justify-between text-gray-500 text-sm pt-2">
+        <p className="text-sm text-gray-600 mt-1 line-clamp-3">{blog.description}</p>
+        <div className="flex-grow" />
+        <div className="flex items-center justify-between border-t text-gray-500 text-sm pt-2 mt-4">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <span>{formatDate(blog.createdAt)}</span>

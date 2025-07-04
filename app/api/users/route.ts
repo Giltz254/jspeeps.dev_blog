@@ -3,13 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const userId = req.nextUrl.searchParams.get("userId");
-
-  console.log("UserId>>>", userId);
-
   if (!userId) {
     return NextResponse.json({ error: "Missing userId" }, { status: 400 });
   }
-
   try {
     const user = await db.user.findUnique({
       where: { id: userId },

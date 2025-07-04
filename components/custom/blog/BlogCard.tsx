@@ -2,29 +2,26 @@ import Image from "next/image";
 import Link from "next/link";
 import { BlogWithUser } from "./ListBlog";
 import Reactions from "./Reactions";
-import formatDate, {
-  Block,
-  calculateReadTime,
-} from "@/lib/utils";
+import formatDate, { Block, calculateReadTime, cn } from "@/lib/utils";
 import { getUserId } from "@/lib/userId";
 
 interface BlogCardProps {
   blog: BlogWithUser;
   isUserProfile?: boolean;
+  index: number;
 }
-const BlogCard = async ({ blog, isUserProfile }: BlogCardProps) => {
+const BlogCard = async ({ blog, index }: BlogCardProps) => {
   let readTime = "0 min read";
-  if (Array.isArray(blog.content)) {
-    const blocks = blog.content as Block[];
-    readTime = calculateReadTime(blocks);
-  }
   const userId = await getUserId();
   return (
-    <div className="flex flex-col border-b lg:pr-4 font-[family-name:var(--font-eb-garamond)]">
+    <div className="flex flex-col border-b lg:pr-4">
       <Link
         href={`/blog/${blog.slug}`}
         key={blog.id}
-        className="flex flex-col-reverse sm:flex-row items-start gap-4 group p-4"
+        className={cn(
+          "flex flex-col-reverse sm:flex-row items-start gap-4 group p-4",
+          index !== undefined && index % 2 === 0 && "sm:flex-row-reverse"
+        )}
       >
         <div className="flex-1">
           <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-lora)] font-semibold text-black group-hover:underline transition-all duration-300">
@@ -47,18 +44,18 @@ const BlogCard = async ({ blog, isUserProfile }: BlogCardProps) => {
               <p className="font-medium text-black">{blog.user.name}</p>
               <div className="text-gray-500 text-sm font-[family-name:var(--font-eb-garamond)]">
                 <span className="">{formatDate(blog.createdAt)}</span> ·{" "}
-                {readTime}
+                {blog.readtime || readTime}
               </div>
             </div>
           </div>
         </div>
         {blog.coverImage && (
-          <div className="min-w-[100px] bg-gray-200 border-border sm:aspect-square sm:w-[160px] w-full border aspect-video relative">
+          <div className="min-w-[100px] bg-gray-200 border-border sm:aspect-square sm:w-[160px] w-full border aspect-video relative after:content-[''] after:absolute after:w-full after:h-full after:bg-blue-100 after:hidden sm:after:block after:top-2 after:right-2 after:border-l-2 after:border-b-2 after:border-blue-500 group-hover:after:right-0 group-hover:after:top-0 after:transition-all after:duration-500">
             <Image
               src={blog.coverImage}
               alt={blog.title}
               fill
-              className="object-cover"
+              className="object-cover z-[2]"
               priority={false}
               sizes="(max-width: 640px) 100vw, (min-width: 640px) 160px, 160px"
             />
@@ -68,9 +65,9 @@ const BlogCard = async ({ blog, isUserProfile }: BlogCardProps) => {
       <Reactions
         blogId={blog.id}
         claps={blog._count.claps}
-        Clapped={!!blog.claps.length}
+        Clapped={blog.clappedByUser}
         userId={userId}
-        bookmarked={!!blog.bookmarks.length}
+        bookmarked={blog.bookmarkedByUser}
         comments={blog._count.comments}
         slug={blog.slug}
       />

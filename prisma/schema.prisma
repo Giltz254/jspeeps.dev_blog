@@ -93,6 +93,7 @@ model Blog {
   summary       String?
   searchText    String
   content       Json
+  readtime      String?
   tags          String[]
   slug          String         @unique
   claps         Clap[]

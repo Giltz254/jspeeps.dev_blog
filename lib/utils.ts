@@ -12,6 +12,10 @@ export type Block = {
     items?: string[];
   };
 };
+type EditorBlock = {
+  type: string;
+  data: any;
+};
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -73,22 +77,17 @@ export const generateUniqueSlug = async (
 };
 export const calculateReadTime = (content: Block[]): string => {
   const wordsPerMinute = 200;
-
   const textContent = content.map((block) => {
     if (block.type === "paragraph" || block.type === "header") {
       return block.data.text || "";
     }
-
     if (block.type === "list" && Array.isArray(block.data.items)) {
       return block.data.items.join(" ");
     }
-
     return "";
   });
-
   const totalWords = textContent.join(" ").trim().split(/\s+/).length;
   const minutes = Math.ceil(totalWords / wordsPerMinute);
-
   return `${minutes} min read`;
 }
 

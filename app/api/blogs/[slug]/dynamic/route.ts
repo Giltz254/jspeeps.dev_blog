@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getUserId } from "@/lib/userId";
+import { headers } from "next/headers";
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const userId = await getUserId()
+  const headersList = await headers();
+  const userId = headersList.get("x-user-id");
   if (!slug) {
     return NextResponse.json({ error: "Missing Slug!" }, { status: 400 });
   }

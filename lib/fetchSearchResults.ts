@@ -44,8 +44,6 @@ export async function fetchSearchResults({
         cache: "force-cache",
       }
     );
-
-    // Handle Arcjet-specific status codes
     if (res.status === 429) {
       const { reason } = await res.json();
       return { status: "rate-limited", reason: reason?.code || "Too many requests" };
