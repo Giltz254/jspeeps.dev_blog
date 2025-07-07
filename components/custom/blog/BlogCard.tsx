@@ -2,19 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { BlogWithUser } from "./ListBlog";
 import Reactions from "./Reactions";
-import formatDate, { Block, calculateReadTime, cn } from "@/lib/utils";
+import formatDate, { cn } from "@/lib/utils";
 import { getUserId } from "@/lib/userId";
 
 interface BlogCardProps {
   blog: BlogWithUser;
   isUserProfile?: boolean;
   index: number;
+  total: number;
 }
-const BlogCard = async ({ blog, index }: BlogCardProps) => {
+const BlogCard = async ({ blog, index, total }: BlogCardProps) => {
   let readTime = "0 min read";
   const userId = await getUserId();
   return (
-    <div className="flex flex-col border-b lg:pr-4">
+    <div className={cn("flex flex-col lg:pr-4", index < total - 1 && "border-b")}>
       <Link
         href={`/blog/${blog.slug}`}
         key={blog.id}

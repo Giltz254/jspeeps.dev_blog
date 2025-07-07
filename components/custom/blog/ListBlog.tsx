@@ -48,7 +48,7 @@ const ListBlog = ({
     <div className="flex flex-col min-h-[calc(100vh-64px)]">
       <section className="">
         {blogs.map((blog, index) => (
-          <BlogCard key={blog.id} index={index} blog={blog} isUserProfile={isUserProfile} />
+          <BlogCard total={blogs.length} key={blog.id} index={index} blog={blog} isUserProfile={isUserProfile} />
         ))}
       </section>
       <Pagination isBookMark={isBookmark} tag={tag} hasMore={hasMore} currentPage={currentPage} username={username} />
