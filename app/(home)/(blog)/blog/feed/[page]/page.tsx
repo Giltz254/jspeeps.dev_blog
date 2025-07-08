@@ -77,12 +77,14 @@ const BlogFeed = async ({ params }: BlogFeedProps) => {
         }
       ).then((res) => res.json()),
       fetchTags(),
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/featured`).then(
-        (res) => res.json()
-      ),
-      fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/fan-favourites`
-      ).then((res) => res.json()),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/featured`, {
+        cache: "force-cache",
+        next: { tags: ["blogs"] },
+      }).then((res) => res.json()),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/fan-favourites`, {
+        cache: "force-cache",
+        next: { tags: ["blogs"] },
+      }).then((res) => res.json()),
     ]);
   const staticError = staticRes?.error;
   const dynamicError = dynamicRes?.error;

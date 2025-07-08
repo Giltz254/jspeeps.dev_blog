@@ -39,12 +39,14 @@ const tagPage = async ({
           next: { tags: ["blogs"] },
         }
       ).then((res) => res.json()),
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/featured`).then(
-        (res) => res.json()
-      ),
-      fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/fan-favourites`
-      ).then((res) => res.json()),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/featured`, {
+        cache: "force-cache",
+        next: { tags: ["blogs"] },
+      }).then((res) => res.json()),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/fan-favourites`, {
+        cache: "force-cache",
+        next: { tags: ["blogs"] },
+      }).then((res) => res.json()),
     ]);
   const error =
     staticRes?.error ||
