@@ -22,32 +22,36 @@ const tagPage = async ({
   const { page, tag } = await params;
   const currentPage = parseInt(page ?? "1", 10);
   const userId = await getUserId();
-  const [staticRes, dynamicRes, staticData] = await Promise.all([
-    fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/tags/static/${tag}/${currentPage}`,
-      {
-        cache: "force-cache",
-        next: { tags: ["blogs"] },
-      }
-    ).then((res) => res.json()),
-    fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/tags/dynamic/${tag}/${currentPage}`,
-      {
-        headers: { "x-user-id": userId ?? "" },
-        cache: "no-store",
-        next: { tags: ["blogs"] },
-      }
-    ).then((res) => res.json()),
-    fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/static/${currentPage}`,
-      {
-        cache: "force-cache",
-        next: { tags: ["blogs"] },
-      }
-    ).then((res) => res.json()),
-  ]);
+  const [staticRes, dynamicRes, featuredData, favouritesData] =
+    await Promise.all([
+      fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/tags/static/${tag}/${currentPage}`,
+        {
+          cache: "force-cache",
+          next: { tags: ["blogs"] },
+        }
+      ).then((res) => res.json()),
+      fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/tags/dynamic/${tag}/${currentPage}`,
+        {
+          headers: { "x-user-id": userId ?? "" },
+          cache: "no-store",
+          next: { tags: ["blogs"] },
+        }
+      ).then((res) => res.json()),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/featured`).then(
+        (res) => res.json()
+      ),
+      fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/fan-favourites`
+      ).then((res) => res.json()),
+    ]);
   const error =
-    staticRes?.error || dynamicRes?.error || staticData?.error || null;
+    staticRes?.error ||
+    dynamicRes?.error ||
+    featuredData?.error ||
+    favouritesData?.error ||
+    null;
   const blogs = (staticRes?.success?.blogs || []).map((blog: BlogWithUser) => {
     const interaction = dynamicRes?.success?.userInteractions?.[blog.id] || {
       clappedByUser: false,
@@ -59,8 +63,8 @@ const tagPage = async ({
     };
   });
   const hasMore = staticRes?.success?.hasMore ?? false;
-  const fanFavourites = staticData?.success?.fanFavourites ?? [];
-  const featuredBlogs = staticData?.success?.featuredBlogs ?? [];
+  const featuredBlogs = featuredData?.success?.featuredBlogs ?? [];
+  const fanFavourites = favouritesData?.success?.fanFavourites ?? [];
   return (
     <div className="flex flex-col lg:flex-row max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
       <div className="flex-1 pb-10 lg:border-r lg:border-border">

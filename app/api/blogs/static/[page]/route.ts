@@ -18,7 +18,7 @@ export async function GET(
     const limit = 10;
     const skip = (pageNumber - 1) * limit;
     const whereClause = { isPublished: true };
-    const [blogs, totalBlogsCount, featuredBlogs, fanFavourites] =
+    const [blogs, totalBlogsCount] =
       await Promise.all([
         db.blog.findMany({
           skip,
@@ -47,49 +47,6 @@ export async function GET(
         }),
 
         db.blog.count({ where: whereClause }),
-
-        db.blog.findMany({
-          where: { ...whereClause, featured: true },
-          orderBy: { createdAt: "desc" },
-          select: {
-            id: true,
-            title: true,
-            slug: true,
-            coverImage: true,
-            description: true,
-            createdAt: true,
-            readtime: true,
-            user: {
-              select: {
-                id: true,
-                name: true,
-                image: true,
-              },
-            },
-          },
-        }),
-
-        db.blog.findMany({
-          where: whereClause,
-          orderBy: { claps: { _count: "desc" } },
-          take: 5,
-          select: {
-            id: true,
-            title: true,
-            slug: true,
-            coverImage: true,
-            description: true,
-            createdAt: true,
-            content: true,
-            user: {
-              select: {
-                id: true,
-                name: true,
-                image: true,
-              },
-            },
-          },
-        }),
       ]);
 
     const hasMore = totalBlogsCount > pageNumber * limit;
@@ -98,8 +55,6 @@ export async function GET(
       success: {
         blogs,
         hasMore,
-        featuredBlogs,
-        fanFavourites,
         totalPages,
       },
     });

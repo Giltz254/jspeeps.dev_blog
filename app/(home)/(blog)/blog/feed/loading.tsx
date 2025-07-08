@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import React from "react";
-const LoadingSkeleton = () => {
+export const LoadingSkeleton = () => {
   return (
     <div className="relative flex items-center w-full h-full overflow-hidden bg-white max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex gap-6 overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth h-full items-center">

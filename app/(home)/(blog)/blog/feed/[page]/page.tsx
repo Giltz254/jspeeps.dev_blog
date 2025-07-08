@@ -59,27 +59,35 @@ const BlogFeed = async ({ params }: BlogFeedProps) => {
   const { page } = await params;
   const userId = await getUserId();
   const currentPage = parseInt(page, 10) || 1;
-  const [staticRes, dynamicRes, tags] = await Promise.all([
-    fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/static/${currentPage}`,
-      {
-        next: { tags: ["blogs"] },
-        cache: "force-cache",
-      }
-    ).then((res) => res.json()),
-    fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/dynamic/${currentPage}`,
-      {
-        headers: { "x-user-id": userId ?? "" },
-        cache: "no-store",
-        next: { tags: ["blogs"] },
-      }
-    ).then((res) => res.json()),
-    fetchTags(),
-  ]);
+  const [staticRes, dynamicRes, tags, featuredData, favouritesData] =
+    await Promise.all([
+      fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/static/${currentPage}`,
+        {
+          next: { tags: ["blogs"] },
+          cache: "force-cache",
+        }
+      ).then((res) => res.json()),
+      fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/dynamic/${currentPage}`,
+        {
+          headers: { "x-user-id": userId ?? "" },
+          cache: "no-store",
+          next: { tags: ["blogs"] },
+        }
+      ).then((res) => res.json()),
+      fetchTags(),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/featured`).then(
+        (res) => res.json()
+      ),
+      fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/fan-favourites`
+      ).then((res) => res.json()),
+    ]);
   const staticError = staticRes?.error;
   const dynamicError = dynamicRes?.error;
-  const combinedError = staticError || dynamicError;
+  const combinedError =
+    staticError || dynamicError || featuredData?.error || favouritesData?.error;
   if (!Array.isArray(tags)) {
     return [];
   }
@@ -101,11 +109,9 @@ const BlogFeed = async ({ params }: BlogFeedProps) => {
         };
       })
     : [];
-
   const hasMore = staticRes.success?.hasMore ?? false;
-  const fanFavourites = staticRes.success?.fanFavourites ?? [];
-  const featuredBlogs = staticRes.success?.featuredBlogs ?? [];
-
+  const featuredBlogs = featuredData?.success?.featuredBlogs ?? [];
+  const fanFavourites = favouritesData?.success?.fanFavourites ?? [];
   return (
     <div className="flex flex-col min-h-[calc(100vh-64px)] bg-white w-full">
       <div className="sticky top-16 h-16 w-full border-b z-10">

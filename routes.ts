@@ -40,7 +40,9 @@ export const publicRoutes: (string | RegExp)[] = [
   /^\/api\/users\/[^/]+\/blogs\/static\/\d+$/,
   /^\/api\/users\/[^/]+\/blogs\/dynamic\/\d+$/,
   "/api/blogs/total-pages",
-  /^\/api\/blogs\/tags\/total-pages\/[^/]+$/
+  /^\/api\/blogs\/tags\/total-pages\/[^/]+$/,
+  "/api/blogs/featured",
+  "/api/blogs/fan-favourites"
 ];
 
 export const authRoutes = [
