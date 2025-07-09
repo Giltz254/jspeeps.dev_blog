@@ -17,6 +17,9 @@ import { getBlogById } from "@/actions/blogs/get-blog-by-id";
 import { getSummaryFromEditorJS } from "@/lib/ai";
 import SEOKeywordTitleGenerator from "./SeoKeywordTitleGenerator";
 import { showErrorToast, showSuccessToast } from "../layout/Toasts";
+import { FilePenLine, LucideHeading1, Plus } from "lucide-react";
+import { BsCardText } from "react-icons/bs";
+import { MdOutlineDrafts } from "react-icons/md";
 const Editorjs = dynamic(() => import("./editor/EditorJs"), {
   ssr: false,
 });
@@ -287,6 +290,7 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
           {!uploadedCover && <AddCover setUploadedCover={setUploadedCover} />}
         </div>
         <FormField
+          leftIcon={<LucideHeading1 />}
           id="title"
           register={register}
           errors={errors}
@@ -299,6 +303,7 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
             id="description"
             register={register}
             errors={errors}
+            leftIcon={<BsCardText />}
             placeholder="Blog Description"
             disabled={isPublishing}
             inputClassNames="text-xl placeholder:text-gray-800"
@@ -354,9 +359,11 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center flex-wrap justify-between gap-4">
           <ReusableButton
             type="submit"
+            className="w-max"
+            leftIcon={isEditMode ? <FilePenLine /> : <Plus />}
             disabled={isPublishing}
             label={
               isPublishing
@@ -369,8 +376,10 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
             }
           />
           <ReusableButton
+            leftIcon={<MdOutlineDrafts />}
             onClick={handleDraftBlog}
             type="button"
+            className="w-max"
             disabled={isSavingAsDraft}
             label={isSavingAsDraft ? "Saving..." : "Save Draft"}
           />

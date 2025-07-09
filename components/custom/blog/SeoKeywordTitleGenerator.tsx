@@ -75,7 +75,7 @@ Return only valid JSON — no code blocks, markdown, or extra text.
       <ReusableButton
         onClick={fetchTitles}
         disabled={loading}
-        className="rounded-sm mb-4"
+        className="mb-4 w-max"
         label={loading ? "Generating..." : "Generate Titles"}
       />
       {generatedTitles.length > 0 && (

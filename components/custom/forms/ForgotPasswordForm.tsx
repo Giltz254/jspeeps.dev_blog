@@ -11,8 +11,8 @@ import {
   PasswordEmailSchemaType,
 } from "@/schemas/ResetPasswordEmailSchema";
 import { passwordResetEmail } from "@/actions/auth/password-reset-email";
-import Logo from "./Logo";
 import { showErrorToast, showSuccessToast } from "../layout/Toasts";
+import AnimatedLogo from "./AnimatedLogo";
 
 const PasswordResetForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -42,9 +42,9 @@ const PasswordResetForm = () => {
   return (
     <div className="h-full pt-16 flex items-center justify-center">
       <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white relative">
-        <div className="w-full md:w-1/2 p-8">
+        <div className="w-full md:w-1/2 flex flex-col gap-y-4 md:pr-4">
           <div className="flex px-4 justify-center gap-4 mb-6 h-12 items-center w-full">
-            <Logo />
+            <AnimatedLogo />
           </div>
           <div className="flex flex-col mb-6">
             <h2 className="text-2xl font-semibold text-center text-black">

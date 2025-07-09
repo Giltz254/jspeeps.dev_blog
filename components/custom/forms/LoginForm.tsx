@@ -14,8 +14,8 @@ import { LOGIN_REDIRECT } from "@/routes";
 import SocialAuth from "./SocialAuth";
 import { useSearchParams } from "next/navigation";
 import { verifyEmail } from "@/actions/auth/email-verification";
-import Logo from "./Logo";
 import { showErrorToast, showSuccessToast } from "../layout/Toasts";
+import AnimatedLogo from "./AnimatedLogo";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -66,9 +66,9 @@ const LoginForm = () => {
   return (
     <div className="h-full py-10 flex items-center justify-center">
       <div className="w-full max-w-4xl flex flex-col md:flex-row bg-white relative">
-        <div className="w-full md:w-1/2 p-8">
+        <div className="w-full flex flex-col gap-y-4 md:w-1/2 md:pr-4">
           <div className="flex px-4 justify-center gap-4 mb-6 h-12 items-center w-full">
-            <Logo />
+            <AnimatedLogo />
           </div>
           <h2 className="text-2xl font-semibold text-center text-black mb-6">
             Log into your account
@@ -109,7 +109,7 @@ const LoginForm = () => {
                 />
                 <Link
                   href={"/forgot-password"}
-                  className="text-base text-right text-black font-medium transition-colors duration-300 cursor-pointer hover:underline"
+                  className="text-sm text-right mt-2 text-blue-600 font-medium transition-all duration-300 cursor-pointer hover:text-blue-700"
                 >
                   Forgot password
                 </Link>
@@ -128,7 +128,7 @@ const LoginForm = () => {
             </span>
             <Link
               href="/register"
-              className="text-base font-medium text-black hover:underline transition-all duration-300"
+              className="text-sm font-medium text-blue-600 hover:underline transition-all duration-300"
             >
               Register
             </Link>

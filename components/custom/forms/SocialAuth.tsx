@@ -17,14 +17,14 @@ const SocialAuth = () => {
   return (
     <div className="w-full md:w-1/2 p-8 flex flex-col justify-center space-y-4">
       <ReusableButton
-        label="Sign in with google"
-        className="cursor-pointer text-sm"
+        label="Continue with Google"
+        className="cursor-pointer"
         leftIcon={<FcGoogle size={24} />}
         onClick={() => handleClick("google")}
       />
       <ReusableButton
         onClick={() => handleClick("github")}
-        label="Sign in with github"
+        label="Continue with Github"
         leftIcon={<FaGithub size={24} />}
         className="cursor-pointer"
       />
