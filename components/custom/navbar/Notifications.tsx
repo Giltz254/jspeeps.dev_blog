@@ -132,7 +132,6 @@ const Notifications = ({
       )
     );
     setUnreadCount((prev) => (prev > 0 ? prev - 1 : 0));
-
     try {
       const result = await markNotificationAsRead(notificationId, false);
       if (result.error) {

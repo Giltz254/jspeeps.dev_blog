@@ -15,7 +15,6 @@ import { OutputBlockData } from "@editorjs/editorjs";
 import { redirect, useSearchParams } from "next/navigation";
 import { getBlogById } from "@/actions/blogs/get-blog-by-id";
 import { getSummaryFromEditorJS } from "@/lib/ai";
-import SEOKeywordTitleGenerator from "./SeoKeywordTitleGenerator";
 import { showErrorToast, showSuccessToast } from "../layout/Toasts";
 import { FilePenLine, LucideHeading1, Plus } from "lucide-react";
 import { BsCardText } from "react-icons/bs";
@@ -128,7 +127,7 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
             userId: blog.userId || userId || "",
             coverImage: blog.coverImage || "",
           });
-
+          setSummary(blog.summary ?? "");
           setUploadedCover(blog.coverImage ?? undefined);
           setEditorContent(parsedContent);
           setIsEditMode(true);
@@ -163,37 +162,34 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
       });
     }
   }, [uploadedCover, setValue]);
-  useEffect(() => {
-    const generateSummary = async () => {
-      if (Array.isArray(currentContent) && currentContent.length > 0) {
-        try {
-          const filteredBlocks = currentContent.filter(
-            (block) => block.type !== "linkTool"
-          );
+  const handleGenerateSummary = async () => {
+    if (!Array.isArray(currentContent) || currentContent.length === 0) {
+      showErrorToast("Add some content before generating a summary.");
+      return;
+    }
 
-          const summary = await getSummaryFromEditorJS({
-            blocks: filteredBlocks,
-            customPrompt:
-              "Summarize the following blog post into a single, well-written paragraph. Do not use bullet points, numbers, or any formatting. The summary should be concise, engaging, and easy to understand, capturing the main ideas, tone, and purpose of the post for readers seeking a quick overview.",
-          });
+    try {
+      const filteredBlocks = currentContent.filter(
+        (block) => block.type !== "linkTool"
+      );
 
-          setSummary(summary ?? "");
-        } catch (error) {
-          setSummary("");
-        }
+      const summaryText = await getSummaryFromEditorJS({
+        blocks: filteredBlocks,
+        customPrompt:
+          "Summarize the following blog post into a single, well-written paragraph. Do not use bullet points, numbers, or any formatting. The summary should be concise, engaging, and easy to understand, capturing the main ideas, tone, and purpose of the post for readers seeking a quick overview.",
+      });
+
+      if (summaryText) {
+        setSummary(summaryText);
+        showSuccessToast("Summary generated successfully!");
       } else {
         setSummary("");
+        showErrorToast("Failed to generate summary.");
       }
-    };
-
-    const handler = setTimeout(() => {
-      generateSummary();
-    }, 500);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [currentContent]);
+    } catch (error) {
+      showErrorToast("An error occurred while generating summary.");
+    }
+  };
   const handleChange = useCallback(
     async (blocks: OutputBlockData[]) => {
       setValue("content", blocks, {
@@ -273,11 +269,36 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto bg-white px-4 min-h-[calc(100vh-64px)] font-[family-name:var(--font-lora)]">
+    <div className="max-w-5xl mx-auto bg-white px-4 min-h-[calc(100vh-64px)]">
       <form
-        className="py-10 flex flex-col gap-y-10"
+        className="flex flex-col gap-y-10"
         onSubmit={handleSubmit(handleCreateBlog)}
       >
+        <div className="flex items-center flex-wrap justify-end gap-4 border-b py-4 sticky top-16 bg-white z-10">
+          <ReusableButton
+            type="submit"
+            className="w-max"
+            leftIcon={isEditMode ? <FilePenLine /> : <Plus />}
+            disabled={isPublishing}
+            label={
+              isPublishing
+                ? isEditMode
+                  ? "Editing..."
+                  : "Creating..."
+                : isEditMode
+                  ? "Edit"
+                  : "Create"
+            }
+          />
+          <ReusableButton
+            leftIcon={<MdOutlineDrafts />}
+            onClick={handleDraftBlog}
+            type="button"
+            className="w-max"
+            disabled={isSavingAsDraft}
+            label={isSavingAsDraft ? "Saving..." : "Save Draft"}
+          />
+        </div>
         <div>
           {!!uploadedCover && (
             <CoverImage
@@ -351,6 +372,12 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
             placeholder="AI will summarize your content here..."
             style={{ height: "auto" }}
           />
+          <ReusableButton
+            type="button"
+            onClick={handleGenerateSummary}
+            className="mt-2 w-max"
+            label="Generate Summary"
+          />
         </div>
 
         <div>
@@ -358,34 +385,7 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
             <span className="text-base text-rose-500">Missing UserId</span>
           )}
         </div>
-
-        <div className="flex items-center flex-wrap justify-between gap-4">
-          <ReusableButton
-            type="submit"
-            className="w-max"
-            leftIcon={isEditMode ? <FilePenLine /> : <Plus />}
-            disabled={isPublishing}
-            label={
-              isPublishing
-                ? isEditMode
-                  ? "Editing..."
-                  : "Creating..."
-                : isEditMode
-                  ? "Edit"
-                  : "Create"
-            }
-          />
-          <ReusableButton
-            leftIcon={<MdOutlineDrafts />}
-            onClick={handleDraftBlog}
-            type="button"
-            className="w-max"
-            disabled={isSavingAsDraft}
-            label={isSavingAsDraft ? "Saving..." : "Save Draft"}
-          />
-        </div>
       </form>
-      <SEOKeywordTitleGenerator />
     </div>
   );
 };

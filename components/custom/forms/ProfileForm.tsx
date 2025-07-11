@@ -148,6 +148,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           <ReusableButton
             onClick={handleEditClick}
             type="button"
+            className="w-max"
             leftIcon={<Edit className="w-4 h-4" />}
             label="Edit"
           />
@@ -238,7 +239,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                 onClick={handleGenerateBio}
                 type="button"
                 label="Generate Bio"
-                className="mt-4"
+                className="mt-4 w-max"
                 disabled={isPending}
               />
             )}
@@ -286,6 +287,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
             <ReusableButton
               type="submit"
               disabled={isPending}
+              className="w-max"
               label={isPending ? "Saving..." : "Save Changes"}
             />
           </div>
