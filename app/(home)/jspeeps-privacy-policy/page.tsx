@@ -1,180 +1,231 @@
-import React from "react";
-import { CheckCircle } from "lucide-react";
+import {
+  Shield,
+  Eye,
+  Database,
+  Share2,
+  Mail,
+} from "lucide-react";
 import Link from "next/link";
-
-const ListItem = ({ children }: { children: React.ReactNode }) => (
-  <li className="flex items-start gap-2">
-    <CheckCircle className="mt-1 text-emerald-500 w-5 h-5 shrink-0" />
-    <span>{children}</span>
-  </li>
-);
-
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 const PrivacyPolicy = () => {
+  const sections = [
+    {
+      id: "information-collection",
+      title: "Information We Collect",
+      icon: Database,
+      content: [
+        "Personal information you provide when creating an account or contacting us",
+        "Usage data including pages visited, features used, and interaction patterns",
+        "Device information such as browser type, operating system, and IP address",
+        "JavaScript learning preferences and skill level assessments",
+      ],
+    },
+    {
+      id: "information-use",
+      title: "How We Use Your Information",
+      icon: Eye,
+      content: [
+        "Provide and maintain our JavaScript learning platform",
+        "Personalize your learning experience and recommend relevant content",
+        "Send important updates about our services and new features",
+        "Analyze usage patterns to improve our platform and educational content",
+        "Respond to your inquiries and provide customer support",
+      ],
+    },
+    {
+      id: "information-sharing",
+      title: "Information Sharing",
+      icon: Share2,
+      content: [
+        "We do not sell, trade, or rent your personal information to third parties",
+        "Anonymous usage data may be shared with educational partners to improve JavaScript learning resources",
+        "Information may be disclosed if required by law or to protect our legal rights",
+        "Service providers who help us operate our platform may have access to your data under strict confidentiality agreements",
+      ],
+    },
+    {
+      id: "data-security",
+      title: "Data Security",
+      icon: Shield,
+      content: [
+        "We implement industry-standard security measures to protect your data",
+        "All data transmission is encrypted using SSL/TLS protocols",
+        "Regular security audits and updates to protect against vulnerabilities",
+        "Limited access to personal data on a need-to-know basis for our team",
+      ],
+    },
+  ];
+
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-white pt-10 text-gray-800 overflow-x-hidden">
-      <div className="bg-gray-50 border border-border py-20 relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full rounded-md">
-        <div className="text-center text-black max-w-3xl mx-auto px-4">
-          <h1 className="text-xl font-bold uppercase tracking-wide">
-            We care about your privacy
-          </h1>
-          <p>Your privacy is important to us at jspeeps. We respect your privacy regarding any information we may collect from you across our website</p>
-          <div className="mt-4 inline-block bg-black bg-opacity-30 text-white text-sm px-5 py-1.5 rounded-full shadow">
-            Updated June 13, 2025
+    <div className="min-h-screen bg-gradient-hero">
+      <section className="py-16 lg:py-24">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-slate-500 via-blue-500 to-blue-600 rounded-2xl mb-6">
+              <Shield className="h-8 w-8 text-white" />
+            </div>
+            <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
+              Privacy Policy
+            </h1>
+            <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Your privacy is important to us. This policy explains how JSPeeps
+              collects, uses, and protects your personal information when you
+              use our JavaScript learning platform.
+            </p>
           </div>
         </div>
-      </div>
-      <div className="relative z-10 max-w-4xl mx-auto sm:px-6 px-4 -mt-12 pb-10">
-        <div className="bg-white p-8 rounded-xl border border-border relative z-10">
-          <p>
-            This Privacy Policy describes our policies and procedures on the
-            collection, use, and disclosure of your information when you visit
-            our website and tells you about your privacy rights and how the law
-            protects you.
-          </p>
-          <p>
-            We use your personal data to provide and improve the Service. By
-            using the Service, you agree to the collection and use of
-            information according to this Privacy Policy.
-          </p>
+      </section>
 
-          <h2>1. Interpretation and Definitions</h2>
-          <h3>1.1 Interpretation</h3>
-          <p>
-            Capitals like “Account,” “Company,” etc. have specific definitions
-            and apply whether singular or plural.
-          </p>
+      {/* Main Content */}
+      <section className="pb-16 lg:pb-24">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            {/* Introduction */}
+            <Card className="mb-12 shadow-none border">
+              <CardContent className="p-8 lg:p-12">
+                <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-6">
+                  Our Commitment to You
+                </h2>
+                <div className="prose prose-lg max-w-none text-muted-foreground">
+                  <p className="mb-4">
+                    At JSPeeps, we're committed to protecting your privacy and
+                    being transparent about how we handle your data. This
+                    Privacy Policy applies to all services provided by JSPeeps,
+                    including our website, educational content, and any related
+                    services.
+                  </p>
+                  <p className="mb-4">
+                    By using our services, you agree to the collection and use
+                    of information in accordance with this policy. We'll only
+                    use your personal information to provide and improve our
+                    JavaScript learning platform.
+                  </p>
+                  <p>
+                    If you have any questions about this Privacy Policy, please
+                    don't hesitate to contact us at the information provided
+                    below.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+            <div className="space-y-8">
+              {sections.map((section, index) => (
+                <Card
+                  key={section.id}
+                  className="shadow-none border overflow-hidden"
+                >
+                  <CardContent className="p-0">
+                    <div className="p-6 lg:p-8">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-gradient-to-r from-slate-500 via-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-soft">
+                          <section.icon className="h-6 w-6 text-primary-foreground" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl lg:text-2xl font-bold text-foreground">
+                            {section.title}
+                          </h3>
+                          <p className="text-muted-foreground">
+                            Section {index + 1} of {sections.length}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-6 lg:p-8">
+                      <ul className="space-y-4">
+                        {section.content.map((item, itemIndex) => (
+                          <li
+                            key={itemIndex}
+                            className="flex items-start gap-3"
+                          >
+                            <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                            <span className="text-muted-foreground leading-relaxed">
+                              {item}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            <div className="grid md:grid-cols-2 gap-8 mt-12">
+              <Card className="shadow-none border">
+                <CardContent className="p-6 lg:p-8">
+                  <h3 className="text-xl font-bold text-foreground mb-4">
+                    Your Rights
+                  </h3>
+                  <ul className="space-y-3 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2" />
+                      <span>Access your personal data</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2" />
+                      <span>Correct inaccurate information</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2" />
+                      <span>Request data deletion</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2" />
+                      <span>Opt out of communications</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
 
-          <h3>1.2 Definitions</h3>
-          <ul className="space-y-2">
-            <ListItem>
-              <strong>Account:</strong> A unique account created for you to
-              access the Service.
-            </ListItem>
-            <ListItem>
-              <strong>Affiliate:</strong> An entity controlling or controlled by
-              a party (≥50%).
-            </ListItem>
-            <ListItem>
-              <strong>Company:</strong> “We”, “Us”, “Our” refers to jspeeps.
-            </ListItem>
-            <ListItem>
-              <strong>Cookies:</strong> Small files placed on your device by a
-              website.
-            </ListItem>
-            <ListItem>
-              <strong>Country:</strong> Kenya.
-            </ListItem>
-            <ListItem>
-              <strong>Device:</strong> Any device accessing the Service.
-            </ListItem>
-            <ListItem>
-              <strong>Personal Data:</strong> Data relating to an identifiable
-              individual.
-            </ListItem>
-            <ListItem>
-              <strong>Service:</strong> The website jspeeps.
-            </ListItem>
-            <ListItem>
-              <strong>Service Provider:</strong> Third-party processors employed
-              to operate or support the Service.
-            </ListItem>
-            <ListItem>
-              <strong>Third‑party Social Media Service:</strong> Providers
-              (Google, Facebook, Instagram, Twitter, LinkedIn) used for login.
-            </ListItem>
-            <ListItem>
-              <strong>Usage Data:</strong> Automatically collected data from use
-              or infrastructure.
-            </ListItem>
-            <ListItem>
-              <strong>Website:</strong> jspeeps at{" "}
-              <em>https://jspeeps‑dev‑blog.vercel.app/blog/feed/1</em>.
-            </ListItem>
-            <ListItem>
-              <strong>You:</strong> The person or legal entity using the
-              Service.
-            </ListItem>
-          </ul>
-
-          <h2>2. Collecting and Using Your Personal Data</h2>
-          <h3>2.1 Types of Data Collected</h3>
-          <h4>2.1.1 Personal Data</h4>
-          <ul className="space-y-2">
-            <ListItem>Email address</ListItem>
-            <ListItem>First name and last name</ListItem>
-            <ListItem>Usage Data</ListItem>
-          </ul>
-
-          <h4>2.1.2 Usage Data</h4>
-          <p>
-            Collected automatically. Includes IP address, browser type/version,
-            pages visited, timestamps, device identifiers, etc.
-          </p>
-
-          <h4>2.1.3 Third‑Party Social Media Services</h4>
-          <p>
-            If you log in using Google, Facebook, Instagram, Twitter, or
-            LinkedIn, we may collect data associated with your accounts, like
-            name, email, profile info, or contacts you choose to share.
-          </p>
-
-          <h4>2.1.4 Tracking Technologies & Cookies</h4>
-          <p>
-            We use cookies, web beacons, tags and scripts to track usage and
-            preferences.
-          </p>
-
-          <h2>3. Use of Your Personal Data</h2>
-          <ul className="space-y-2">
-            <ListItem>To provide and maintain our Service</ListItem>
-            <ListItem>To manage your Account</ListItem>
-            <ListItem>To fulfill contractual obligations</ListItem>
-            <ListItem>To contact you with updates or offers</ListItem>
-            <ListItem>To respond to your requests</ListItem>
-            <ListItem>For analysis and service improvement</ListItem>
-          </ul>
-
-          <h2>4. Security & Data Retention</h2>
-          <p>
-            We implement reasonable measures to protect your data, but no method
-            is 100% secure. We retain data only as long as needed for legal or
-            business purposes.
-          </p>
-
-          <h2>5. Children’s Privacy</h2>
-          <p>
-            Our Service is not for anyone under 13. If you're a parent and
-            believe we've collected data from a child under 13, contact us and
-            we'll remove it.
-          </p>
-
-          <h2>6. Links to Other Websites</h2>
-          <p>
-            Our Service may link to external sites. We aren’t responsible for
-            their content or policies. Review their privacy practices
-            independently.
-          </p>
-
-          <h2>7. Changes to This Privacy Policy</h2>
-          <p>
-            We may update this policy occasionally. We’ll notify you via email
-            or a notice before changes take effect, updating the “Last updated”
-            date here.
-          </p>
-
-          <h2>8. Contact Us</h2>
-          <p>
-            If you have questions, email us at{" "}
-            <a
-              href="mailto:gkiptoo169@gmail.com"
-              className="text-blue-600 hover:underline"
-            >
-              gkiptoo169@gmail.com
-            </a>
-            .
-          </p>
+              <Card className="shadow-none border">
+                <CardContent className="p-6 lg:p-8">
+                  <h3 className="text-xl font-bold text-foreground mb-4">
+                    Data Retention
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    We retain your personal information only as long as
+                    necessary to provide our services and comply with legal
+                    obligations.
+                  </p>
+                  <p className="text-muted-foreground">
+                    Account data is typically deleted within 30 days of account
+                    closure, unless required for legal compliance.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+            <Card className="mt-12 shadow-none border border-border">
+              <CardContent className="p-8 lg:p-12 text-center">
+                <div
+                  className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-slate-500 via-blue-500 to-blue-600 rounded-2xl mb-6"
+                >
+                  <Mail className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-foreground mb-4">
+                  Questions About Your Privacy?
+                </h3>
+                <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                  If you have any questions about this Privacy Policy or how we
+                  handle your data, please don't hesitate to reach out to our
+                  team.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link
+                    href="/jspeeps-support"
+                    className="inline-block px-5 py-2.5 text-white text-sm font-medium shadow-sm transition duration-300 ease-in-out
+      bg-gradient-to-r from-slate-500 via-blue-500 to-blue-600
+      hover:from-slate-600 hover:via-blue-600 hover:to-blue-700
+      focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2"
+                  >
+                    Contact Us
+                  </Link>
+                  <Button variant="outline">View Terms of Service</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

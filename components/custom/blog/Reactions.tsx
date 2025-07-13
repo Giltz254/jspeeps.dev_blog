@@ -43,6 +43,7 @@ const Reactions = ({
     const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/blog/${slug}`;
     navigator.clipboard.writeText(shareUrl);
     setCopied(true);
+    setIsOpen(false);
     setTimeout(() => setCopied(false), 2000);
   }
 
@@ -50,6 +51,7 @@ const Reactions = ({
     const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/blog/${slug}`;
     const url = path.replace("{{url}}", encodeURIComponent(shareUrl));
     window.open(url, "_blank", "noopener,noreferrer");
+    setIsOpen(false);
   }
 
   useEffect(() => {
@@ -175,7 +177,7 @@ const Reactions = ({
                 </button>
                 <button
                   onClick={() =>
-                   openShare("https://twitter.com/intent/tweet?url={{url}}")
+                    openShare("https://twitter.com/intent/tweet?url={{url}}")
                   }
                   className="flex cursor-pointer items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition"
                 >
@@ -184,7 +186,9 @@ const Reactions = ({
                 </button>
                 <button
                   onClick={() =>
-                    openShare("https://www.facebook.com/sharer/sharer.php?u={{url}}")
+                    openShare(
+                      "https://www.facebook.com/sharer/sharer.php?u={{url}}"
+                    )
                   }
                   className="flex cursor-pointer items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition"
                 >
@@ -193,11 +197,13 @@ const Reactions = ({
                 </button>
                 <button
                   onClick={() =>
-                    openShare("https://www.linkedin.com/sharing/share-offsite/?url={{url}}")
+                    openShare(
+                      "https://www.linkedin.com/sharing/share-offsite/?url={{url}}"
+                    )
                   }
                   className="flex items-center cursor-pointer gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition"
                 >
-                  <FaLinkedinIn  size={16} />
+                  <FaLinkedinIn size={16} />
                   Share on LinkedIn
                 </button>
               </div>

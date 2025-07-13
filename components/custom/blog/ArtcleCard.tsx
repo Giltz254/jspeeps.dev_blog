@@ -36,8 +36,8 @@ export default function ArticleCard({ blog }: ArticleCardProp) {
         </div>
       )}
 
-      <div className="p-4 flex flex-col flex-1">
-        <div className="text-sm text-gray-500 flex items-center gap-1">
+      <div className="flex flex-col flex-1">
+        <div className="text-sm px-4 pt-4 text-gray-500 flex items-center gap-1">
           <div className="h-6 w-6 flex items-center justify-center rounded-full">
             {blog.user.image ? (
               <Image
@@ -58,12 +58,12 @@ export default function ArticleCard({ blog }: ArticleCardProp) {
           <span className="text-gray-400">by</span>
           <span className="text-gray-700 font-normal">{blog.user.name}</span>
         </div>
-        <h2 className="text-lg block font-bold text-gray-900 leading-snug group-hover:underline mt-2">
+        <h2 className="text-lg px-4 block font-bold text-gray-900 leading-snug group-hover:underline mt-2">
           {blog.title}
         </h2>
-        <p className="text-sm text-gray-600 mt-1 line-clamp-3">{blog.description}</p>
+        <p className="text-sm px-4 text-gray-700 mt-1 line-clamp-3">{blog.description}</p>
         <div className="flex-grow" />
-        <div className="flex items-center justify-between border-t text-gray-500 text-sm pt-2 mt-4">
+        <div className="flex items-center px-4 justify-between border-t text-gray-500 text-sm py-2 mt-4">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <span>{formatDate(blog.createdAt)}</span>

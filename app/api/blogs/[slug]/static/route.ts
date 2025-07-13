@@ -21,6 +21,7 @@ export async function GET(
         description: true,
         createdAt: true,
         summary: true,
+        readtime: true,
         tags: true,
         user: {
           select: {
