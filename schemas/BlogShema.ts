@@ -14,6 +14,7 @@ export const BlogSchema = z.object({
   isPublished: z.boolean(),
   tags: z.array(z.string()),
   summary: z.string().optional(),
- featured: z.boolean().optional(),
+  featured: z.boolean().optional(),
+  readtime: z.string().optional(),
 });
-export type BlogSchemaType = z.infer<typeof BlogSchema> 
+export type BlogSchemaType = z.infer<typeof BlogSchema>;

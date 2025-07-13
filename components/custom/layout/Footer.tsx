@@ -14,7 +14,7 @@ const Footer = () => {
             </Link>
             <div className="space-x-8 text-base text-gray-700 flex items-center flex-wrap">
               <Link href="/about">About</Link>
-              <Link href="/support">Support</Link>
+              <Link href="/jspeeps-support">Support</Link>
             </div>
           </div>
           <div className="flex space-x-6 mt-4 md:mt-0">

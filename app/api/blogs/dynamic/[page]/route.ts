@@ -17,8 +17,8 @@ export async function GET(
       );
     }
 
-    const pageNumber = parseInt(page, 10);
-    const limit = 10;
+    const pageNumber = parseInt(page || "1", 10);
+    const limit = 20;
     const skip = (pageNumber - 1) * limit;
 
     const blogs = await db.blog.findMany({

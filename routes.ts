@@ -42,7 +42,8 @@ export const publicRoutes: (string | RegExp)[] = [
   "/api/blogs/total-pages",
   /^\/api\/blogs\/tags\/total-pages\/[^/]+$/,
   "/api/blogs/featured",
-  "/api/blogs/fan-favourites"
+  "/api/blogs/fan-favourites",
+  "/jspeeps-support"
 ];
 
 export const authRoutes = [

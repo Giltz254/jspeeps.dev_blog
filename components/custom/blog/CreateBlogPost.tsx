@@ -19,6 +19,7 @@ import { showErrorToast, showSuccessToast } from "../layout/Toasts";
 import { FilePenLine, LucideHeading1, Plus } from "lucide-react";
 import { BsCardText } from "react-icons/bs";
 import { MdOutlineDrafts } from "react-icons/md";
+import { calculateReadTime } from "@/lib/utils";
 const Editorjs = dynamic(() => import("./editor/EditorJs"), {
   ssr: false,
 });
@@ -207,14 +208,18 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
       return showErrorToast("Only 4 tags are required!");
     }
     if (userId) {
+      const payload = {
+        ...data,
+        summary,
+        isPublished: true,
+        id,
+        featured: false,
+      };
+      if (data.content && data.content.length > 0) {
+        payload.readtime = calculateReadTime(data.content);
+      }
       startPublishing(() => {
-        createBlog({
-          ...data,
-          summary,
-          isPublished: true,
-          id,
-          featured: false,
-        }).then((res) => {
+        createBlog(payload).then((res) => {
           if (res.error) {
             showErrorToast(res.error);
           }
@@ -244,8 +249,17 @@ const CreateBlogPost = ({ availableTags, userId }: CreateBlogPostProps) => {
       showErrorToast("Title is required to save a draft.");
       return;
     }
+    const payload = {
+      ...values,
+      summary,
+      isPublished: false,
+      id,
+    };
+    if (values.content && values.content.length > 0) {
+      payload.readtime = calculateReadTime(values.content);
+    }
     startSavingAsDraft(() => {
-      createBlog({ ...values, summary, isPublished: false, id }).then((res) => {
+      createBlog(payload).then((res) => {
         if (res.error) {
           showErrorToast(res.error);
         }

@@ -12,10 +12,6 @@ export type Block = {
     items?: string[];
   };
 };
-type EditorBlock = {
-  type: string;
-  data: any;
-};
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -37,10 +33,9 @@ export const formatDate = (date: string | Date): string => {
 };
 
 export default formatDate;
-export const calculateReadTimeFromBlocks = (
+export const calculateReadTime = (
   blocks: { type: string; data: any }[],
-  wordsPerMinute = 200,
-  imageReadSeconds = 12
+  wordsPerMinute = 200
 ): string => {
   let wordCount = 0;
   let imageCount = 0;
@@ -51,14 +46,19 @@ export const calculateReadTimeFromBlocks = (
       const plainText = text.replace(/<[^>]+>/g, "");
       wordCount += plainText.trim().split(/\s+/).filter(Boolean).length;
     }
+
     if (block.type === "image") {
       imageCount += 1;
     }
   }
   const textMinutes = wordCount / wordsPerMinute;
-  const imageMinutes = (imageCount * imageReadSeconds) / 60;
+  let imageSeconds = 0;
+  for (let i = 1; i <= imageCount; i++) {
+    imageSeconds += Math.max(12 - (i - 1), 3);
+  }
+  const imageMinutes = imageSeconds / 60;
   const totalMinutes = Math.ceil(textMinutes + imageMinutes);
-  return `${totalMinutes} min read`;
+  return `${totalMinutes || 1} min read`;
 };
 export const generateUniqueSlug = async (
   title: string
@@ -75,22 +75,6 @@ export const generateUniqueSlug = async (
   }
   return null;
 };
-export const calculateReadTime = (content: Block[]): string => {
-  const wordsPerMinute = 200;
-  const textContent = content.map((block) => {
-    if (block.type === "paragraph" || block.type === "header") {
-      return block.data.text || "";
-    }
-    if (block.type === "list" && Array.isArray(block.data.items)) {
-      return block.data.items.join(" ");
-    }
-    return "";
-  });
-  const totalWords = textContent.join(" ").trim().split(/\s+/).length;
-  const minutes = Math.ceil(totalWords / wordsPerMinute);
-  return `${minutes} min read`;
-}
-
 export function getUserAgentDetails(uaString: string) {
   const parser = new UAParser.UAParser(uaString);
   const browser = parser.getBrowser().name || "Browser";

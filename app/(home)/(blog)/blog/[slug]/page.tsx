@@ -135,20 +135,17 @@ const page = async ({ params }: BlogContentProps) => {
           date={blog.createdAt}
         />
       )}
-
-      <Suspense fallback={<p>Loading reactions...</p>}>
-        <Reactions
-          isSingleBlogPage={true}
-          blogId={blog.id}
-          claps={dynamicData.clapsCount}
-          Clapped={dynamicData.hasClapped}
-          userId={userId}
-          author={blog.user.id}
-          bookmarked={dynamicData.hasBookmarked}
-          comments={dynamicData.commentsCount}
-          slug={slug}
-        />
-      </Suspense>
+      <Reactions
+        isSingleBlogPage={true}
+        blogId={blog.id}
+        claps={dynamicData.clapsCount}
+        Clapped={dynamicData.hasClapped}
+        userId={userId}
+        author={blog.user.id}
+        bookmarked={dynamicData.hasBookmarked}
+        comments={dynamicData.commentsCount}
+        slug={slug}
+      />
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-64px)]">
         <div className="flex-1 lg:border-r lg:pr-4 pt-4 border-border">
           {blog.coverImage && (
@@ -217,22 +214,18 @@ const page = async ({ params }: BlogContentProps) => {
       </div>
       <div className="border-t border-t-border flex flex-col py-10">
         <div className="flex flex-col mt-4">
-          <Suspense
-            fallback={<CommentsLoader text="Loading related articles..." />}
-          >
-            {relatedBlogs && relatedBlogs.length > 0 && (
-              <>
-                <h2 className="text-2xl font-semibold text-black mb-10">
-                  Related Articles
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
-                  {relatedBlogs.map((blog: BlogPreview) => (
-                    <ArticleCard blog={blog} key={blog.id} />
-                  ))}
-                </div>
-              </>
-            )}
-          </Suspense>
+          {relatedBlogs && relatedBlogs.length > 0 && (
+            <>
+              <h2 className="text-2xl font-semibold text-black mb-10">
+                Related Articles
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+                {relatedBlogs.map((blog: BlogPreview) => (
+                  <ArticleCard blog={blog} key={blog.id} />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </main>
