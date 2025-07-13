@@ -45,6 +45,7 @@ export async function GET(
         content: true,
         tags: true,
         userId: true,
+        readtime: true,
       },
     });
 

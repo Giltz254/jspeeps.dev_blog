@@ -47,6 +47,7 @@ export const createBlog = async (values: BlogSchemaType & { id?: string }) => {
           tags: values.tags?.map((tag) => tag.toLowerCase()) || [],
           coverImage: values.coverImage,
           summary: values.summary,
+          readtime: values.readtime,
           searchText,
           user: {
             connect: { id: userId },
@@ -88,6 +89,7 @@ export const createBlog = async (values: BlogSchemaType & { id?: string }) => {
         slug,
         summary: values.summary,
         content: values.content || " ",
+        readtime: values.readtime,
         searchText,
       },
     });
